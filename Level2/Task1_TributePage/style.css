@@ -1,3 +1,29 @@
 div#main{
+    width : 80%;
     
+    margin: auto;
+    /* background: rebeccapurple; */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    
+}
+div#slider{
+    height: 370px;
+    border: 3px solid black;
+    padding: 10px;
+}
+div#slider-main{
+    margin: auto;
+}
+p{
+    background-color: aqua;
+    padding: 10px;
+}
+
+span.imp{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    color:red;
 }
