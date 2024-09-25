@@ -1,0 +1,15 @@
+div.m-auto ul li{
+    background-color: black;
+    padding: 3px 5px;
+    color:aqua;
+    font-family: 'Courier New', Courier, monospace; 
+    border-radius: 10px;
+
+}
+
+
+div.m-auto ul li:hover{
+   color: black;
+    background-color: white;
+    cursor: pointer;
+}

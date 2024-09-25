@@ -3,24 +3,20 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import dbConfig from "./Config/dbConfig.js";
-import OrgRouter from "./Routes/OrganisationRoutes.js";
-import SeekerRouter from "./Routes/JobSeekerRoutes.js";
-import ProviderRouter from "./Routes/JobProviderRoutes.js";
+import UserRouter from "./Routes/UserRouter.js";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 1008;
 app.use(
   cors({
-    origin: "https://localhost:2000",
+    origin: "http://localhost:3000",
   })
 );
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/job-seeker", SeekerRouter);
-app.use("/job-provider", ProviderRouter);
-app.use("/org", OrgRouter);
+app.use("/users", UserRouter);
 
 dbConfig.dbConnection();
 app.listen(PORT, () =>
