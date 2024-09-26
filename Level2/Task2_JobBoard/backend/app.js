@@ -22,7 +22,8 @@ dbConfig.dbConnection();
 app.listen(PORT, () =>
   console.log("SERVER RUNNING AT " + "http://localhost:" + PORT)
 );
-
+app.use(express.static("profilepics"));
+app.use(express.static("resumes"));
 app.get("/", (req, res) => {
   res.send("<h1>This is the backend</h1>");
 });

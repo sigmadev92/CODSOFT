@@ -3,9 +3,11 @@ import seekerImg from "./images/blank-profile-pic.png";
 import recruiterImg from "./images/recruiter-image.png";
 import orgImg from "./images/org-image.png";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 export default function UserLogin(props) {
   const navigate = useNavigate();
+
+  const [passwordHidden, setpaswordHIdden] = useState(true);
   const [details, setDetails] = useState({
     UserType: props.UserType,
     Email: "",
@@ -36,14 +38,21 @@ export default function UserLogin(props) {
     event.preventDefault();
 
     axios
-      .post("http://localhost:1008/users/register", details)
+      .post("http://localhost:1008/users/login", details)
       .then((response) => {
         console.log(response.data);
         if (response.data.status) {
-          navigate("/login");
+          navigate("/");
+          window.location.reload();
+        } else {
+          alert("Wrong credentials. Try again");
+          window.location.reload();
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert("SOme technical error at our end");
+        console.log(err);
+      });
   }
   return (
     <form onSubmit={HandleSubmit} className="block">
@@ -62,28 +71,29 @@ export default function UserLogin(props) {
         placeholder="Email"
         onChange={HandleChange}
       />
-      <input
-        className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-        type="password"
-        name="Password"
-        value={Password}
-        placeholder="Password"
-        onChange={HandleChange}
-      />
-      <div className="flex justify-around text-[12px] mb-2">
-        <Link to="/register" className="hover:text-[blue]">
-          Don't have an account ? Register
-        </Link>
-        <Link to="forgot-password" className="hover:text-[red]">
-          Forgot Password
-        </Link>
+      <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px]">
+        <input
+          className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
+          type={passwordHidden ? "password" : "text"}
+          name="Password"
+          value={Password}
+          placeholder="Password"
+          onChange={HandleChange}
+        />
+        <button
+          type="button"
+          className=" border-2 bg-red-400 border-black h-fit mt-[10px] px-2 hover:bg-[aqua]"
+          onClick={() => setpaswordHIdden((prev) => !prev)}
+        >
+          TE
+        </button>
       </div>
 
       <button
         type="submit"
-        className="block w-full bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-t-2 border-black"
+        className="block w-full bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-t-2 border-black mt-3"
       >
-        Submit
+        Login
       </button>
     </form>
   );

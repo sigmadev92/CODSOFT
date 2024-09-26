@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar() {
   const navigate = useNavigate();
   return (
-    <div className=" bg-red-500 w-full flex justify-between p-2">
+    <div className=" bg-blue-500 w-full flex justify-between p-2 sticky top-0">
       <div id="heading" className="flex ml-[30px] gap-x-2">
         <img
           src={img}
@@ -19,13 +19,30 @@ export default function Navbar() {
       </div>
       <div id="links" className="mr-[30px] mt-[10px]">
         <ul className="flex gap-3">
-          <li>Home</li>
-          <li>Jobs</li>
           <li
-            className="cursor-pointer hover:bg-white"
+            className="hover:text-white cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            Home
+          </li>
+          <li
+            className="hover:text-white cursor-pointer"
+            onClick={() => navigate("/jobs")}
+          >
+            {" "}
+            Jobs
+          </li>
+          <li
+            className="cursor-pointer hover:text-white"
             onClick={() => navigate("/login")}
           >
             Login
+          </li>
+          <li
+            className="cursor-pointer hover:text-white"
+            onClick={() => navigate("/about")}
+          >
+            About
           </li>
         </ul>
       </div>

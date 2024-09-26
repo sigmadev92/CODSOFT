@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import UserRegister from "../component/UserRegister";
 import "./Register.css";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   const [UserType, setType] = useState("seeker"); //possible values are {seeker,recruiter,org}
@@ -42,6 +43,14 @@ export default function Register() {
         />
         Recruiter
       </form>
+      <div className="flex justify-around text-[12px] my-2">
+        <Link to="/login" className="hover:text-[blue]">
+          Already have an account ? Login
+        </Link>
+        <Link to="forgot-password" className="hover:text-[red]">
+          Forgot Password
+        </Link>
+      </div>
       <button
         type="button"
         className="text-gray-900 bg-green-600 px-2 ml-3 my-1"

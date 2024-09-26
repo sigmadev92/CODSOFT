@@ -6,34 +6,45 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 export default function UserRegister(props) {
   const navigate = useNavigate();
+  const [passwordHidden, setpaswordHIdden] = useState(true);
+
+  //We have total 13 fileds in database.
+  // 8 are common for every type of user
+  // UserType, FullName,Email,PhoneNumber,Password,USER_ID,Posts:[],ProfilePic
+  //Other 5 based on UserType - Resume, JobRole,CompanyName,Position, JobPostings
+
+  //Out of 8 which are common, 5 can be taken from input
   const [details, setDetails] = useState({
     UserType: props.UserType,
     FullName: "",
     Email: "",
     PhoneNumber: "",
     Password: "",
-    JobRole: "",
-    Position: "",
-    Company: "",
-    posts: [],
   });
-  const {
-    UserType,
-    Fullname,
-    Email,
-    PhoneNumber,
-    Password,
-    JobRole,
-    Position,
-    Company,
-  } = details;
+  const { UserType, Fullname, Email, PhoneNumber, Password } = details;
+
+  //USER_ID and Posts are inserted at run time
+  //ProfilePic is changed by different hook
+
+  //Now other 5 which are are based on UserType
+  //Resume, JobRole - only for Job Seeker
+  //Position and CompanyName - only for Recruiter
+  //JobPostings : Either for Organisation or Recruiter
+
+  //Other details
+  //posts:[], USER_ID, Resume, JobRole, CompanyName, Position,
+
   function profile() {
     if (UserType === "org") return orgImg;
     if (UserType === "recruiter") return recruiterImg;
     return seekerImg;
   }
-  const [resume, setResume] = useState(null);
+
   const [profilePic, setProfilePic] = useState(null);
+  const [resume, setResume] = useState(null);
+  const [JobRole, setJobRole] = useState("");
+  const [CompanyName, setCompanyName] = useState("");
+  const [Position, setPosition] = useState("");
   const [imgToBedisp, setImage] = useState(profile);
   const HandleChange = (event) => {
     setDetails((prev) => ({
@@ -46,15 +57,25 @@ export default function UserRegister(props) {
     event.preventDefault();
     const USER_ID = UserType + "-" + Date.now();
     const formData = new FormData();
-
-    formData.append("ProfilePic", profilePic, `images-${USER_ID}.jpg`);
-    if (UserType === "seeker")
-      formData.append("Resume", resume, `resumes-${USER_ID}.pdf`);
-    formData.append("USER_ID", USER_ID);
-
+    //first insert common data
     Array.from(Object.keys(details)).forEach((field) => {
       formData.append(field, details[field]);
     });
+    //Another compulsary data which can't be taken with details
+    formData.append("USER_ID", USER_ID);
+    formData.append("Posts", []);
+    formData.append("ProfilePic", profilePic, `images-${USER_ID}.jpg`);
+    if (UserType === "recruiter") {
+      formData.append("CompanyName", CompanyName);
+      formData.append("Position", Position);
+    }
+    if (UserType === "recruiter" || UserType === "org")
+      formData.append("JobPostings", []);
+
+    if (UserType === "seeker") {
+      formData.append("Resume", resume, `resumes-${USER_ID}.pdf`);
+      formData.append("JobRole", JobRole);
+    }
 
     console.log(formData);
     axios
@@ -131,14 +152,25 @@ export default function UserRegister(props) {
         placeholder="Email"
         onChange={HandleChange}
       />
-      <input
-        className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-        type="password"
-        name="Password"
-        value={Password}
-        placeholder="Password"
-        onChange={HandleChange}
-      />
+
+      <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px]">
+        <input
+          className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
+          type={passwordHidden ? "password" : "text"}
+          name="Password"
+          value={Password}
+          placeholder="Password"
+          onChange={HandleChange}
+        />
+        <button
+          type="button"
+          className=" border-2 bg-red-400 border-black h-fit mt-[10px] px-2 hover:bg-[aqua]"
+          onClick={() => setpaswordHIdden((prev) => !prev)}
+        >
+          TE
+        </button>
+      </div>
+
       <input
         className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
         type="text"
@@ -157,7 +189,7 @@ export default function UserRegister(props) {
             name="JobRole"
             value={JobRole}
             placeholder="Preferred Job Role"
-            onChange={HandleChange}
+            onChange={(ev) => setJobRole(ev.target.value)}
           />
           <div className="flex justify-center bg-slate-500">
             <label htmlFor="resume" className="text-white font-mono">
@@ -188,9 +220,9 @@ export default function UserRegister(props) {
             className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
             type="text"
             name="Company"
-            value={Company}
+            value={CompanyName}
             placeholder="Your Current Company Name"
-            onChange={HandleChange}
+            onChange={(ev) => setCompanyName(ev.target.value)}
           />
           <input
             className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
@@ -198,16 +230,16 @@ export default function UserRegister(props) {
             name="Position"
             value={Position}
             placeholder="Your Position in Current Company"
-            onChange={HandleChange}
+            onChange={(ev) => setPosition(ev.target.value)}
           />
         </>
       )}
 
       <button
         type="submit"
-        className="block w-full bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-t-2 border-black"
+        className="block w-full bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-t-2 border-black font-serif"
       >
-        Submit
+        Register
       </button>
     </form>
   );

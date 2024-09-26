@@ -13,3 +13,12 @@ div.m-auto ul li:hover{
     background-color: white;
     cursor: pointer;
 }
+
+div#main{
+    background-image:linear-gradient(90deg,white,violet,rgb(21, 214, 121),violet,white) ;
+}
+
+h1#italic{
+    font-style: italic;
+    color: black;
+}
