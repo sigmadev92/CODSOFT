@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import UserRegister from "../component/UserRegister";
 import "./Register.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Register() {
+  const loggedIn = useSelector((state) => state.user.loggedIn);
   const [UserType, setType] = useState("seeker"); //possible values are {seeker,recruiter,org}
   const [hidden, setHidden] = useState(true);
   function handleChange(event) {
     console.log(event.target.value);
     setType(event.target.value);
     setHidden(true);
+  }
+  if (loggedIn) {
+    return <Navigate to="/" />;
   }
   return (
     <div className=" max-w-[400px] w-[90%] md:w-[50%] border-2 border-black m-auto my-[50px] rounded-t-[10px]">

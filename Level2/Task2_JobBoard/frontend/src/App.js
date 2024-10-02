@@ -7,7 +7,16 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Jobs from "./pages/Jobs";
 import About from "./pages/About";
+import UserProfile from "./pages/UserProfile";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchUser } from "./redux/slice/userSlice";
+import PrivateProfile from "./pages/PrivateProfile";
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
   return (
     <>
       <BrowserRouter>
@@ -19,6 +28,11 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/about" element={<About />} />
+          <Route
+            path="/private-profile/:user_id"
+            element={<PrivateProfile />}
+          />
+          <Route path="/profile/:user_id" element={<UserProfile />} />
         </Routes>
         <Footer />
       </BrowserRouter>

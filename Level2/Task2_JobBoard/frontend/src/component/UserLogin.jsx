@@ -4,9 +4,12 @@ import recruiterImg from "./images/recruiter-image.png";
 import orgImg from "./images/org-image.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-export default function UserLogin(props) {
-  const navigate = useNavigate();
+import { useDispatch } from "react-redux";
 
+import { setAuth } from "../redux/slice/userSlice";
+export default function UserLogin(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [passwordHidden, setpaswordHIdden] = useState(true);
   const [details, setDetails] = useState({
     UserType: props.UserType,
@@ -42,8 +45,10 @@ export default function UserLogin(props) {
       .then((response) => {
         console.log(response.data);
         if (response.data.status) {
+          localStorage.setItem("jwt", response.data.jwt);
+          dispatch(setAuth(response.data.userData));
           navigate("/");
-          window.location.reload();
+          // window.location.reload();
         } else {
           alert("Wrong credentials. Try again");
           window.location.reload();

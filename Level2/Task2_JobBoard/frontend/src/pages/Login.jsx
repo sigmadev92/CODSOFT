@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import UserLogin from "../component/UserLogin";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Login() {
+  const loggedIn = useSelector((state) => state.user.loggedIn);
+
   const [UserType, setType] = useState("seeker"); //possible values are {seeker,recruiter,org}
   const [hidden, setHidden] = useState(true);
   function handleChange(event) {
     console.log(event.target.value);
     setType(event.target.value);
     setHidden(true);
+  }
+  if (loggedIn) {
+    return <Navigate to={"/"} />;
   }
   return (
     <div className="w-full h-full" id="main12">

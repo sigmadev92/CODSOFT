@@ -1,7 +1,8 @@
 import React from "react";
 import "./Home.css";
-
 export default function Home() {
+  // const [user, setUser] = useState({});
+
   return (
     <>
       <div className="w-full m-auto p-3 bg-slate-500 text-white" id="main">
@@ -15,6 +16,11 @@ export default function Home() {
           India's Leading Platform for Job and Talent Hunt
         </h1>
       </div>
+      {/* {Object.keys(user).length !== 0 && (
+        <h1 className="text-center font-mono bg-black text-[aqua]">
+          {user.FullName.split(" ")[0]}
+        </h1>
+      )} */}
       <h1 className="text-center font-mono mt-3">
         Everything according to your interest
       </h1>{" "}

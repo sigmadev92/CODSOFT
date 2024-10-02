@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import Users from "../Models/Users.js";
 import upload from "../Config/multerConfig.js";
 import bcrypt from "bcrypt";
@@ -77,6 +77,8 @@ UserRouter.post("/login", (req, res) => {
         if (result) {
           return res.send({
             status: true,
+            jwt: user._id,
+            userData: user,
           });
         } else {
           return res.send({
@@ -98,5 +100,48 @@ UserRouter.post("/login", (req, res) => {
         message: "Error : Database error",
       });
     });
+});
+
+UserRouter.get("/auth", (req, res) => {
+  console.log(req.headers.auth);
+  Users.findOne({ _id: req.headers.auth })
+    .then((response) => {
+      if (response)
+        return res.send({
+          status: true,
+          data: response,
+        });
+      else
+        res.send({
+          status: false,
+          message: "Authentication denied. ",
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({
+        status: false,
+        message: "Server error",
+      });
+    });
+});
+
+UserRouter.get("/details/:user_id", async (req, res) => {
+  console.log(req.params);
+  try {
+    const user = await Users.findOne({ USER_ID: req.params.user_id });
+    if (user) {
+      return res.send({
+        status: true,
+        data: user,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
 });
 export default UserRouter;
