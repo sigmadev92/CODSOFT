@@ -30,6 +30,15 @@ export default function About() {
             CodSoft
           </button>
         </p>
+        <h1 className="font-bold text-[25px]">FAQs</h1>
+        <p id="q1" className="font-bold">
+          {" "}
+          Q1. Why we ask about Gender?
+        </p>
+        <p id="q2" className="font-bold">
+          {" "}
+          Q2. Why we ask for uploading image?
+        </p>
       </div>
     </div>
   );

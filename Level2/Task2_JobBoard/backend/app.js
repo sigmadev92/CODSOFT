@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import dbConfig from "./Config/dbConfig.js";
 import UserRouter from "./Routes/UserRouter.js";
+import JobRouter from "./Routes/JobsRoute.js";
 
 dotenv.config();
 const app = express();
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/users", UserRouter);
-
+app.use("/jobs", JobRouter);
 dbConfig.dbConnection();
 app.listen(PORT, () =>
   console.log("SERVER RUNNING AT " + "http://localhost:" + PORT)

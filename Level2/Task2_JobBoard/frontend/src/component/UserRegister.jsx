@@ -17,11 +17,12 @@ export default function UserRegister(props) {
   const [details, setDetails] = useState({
     UserType: props.UserType,
     FullName: "",
+    Gender: "0",
     Email: "",
     PhoneNumber: "",
     Password: "",
   });
-  const { UserType, Fullname, Email, PhoneNumber, Password } = details;
+  const { UserType, Fullname, Gender, Email, PhoneNumber, Password } = details;
 
   //USER_ID and Posts are inserted at run time
   //ProfilePic is changed by different hook
@@ -97,8 +98,9 @@ export default function UserRegister(props) {
         onClick={() => console.log(UserType)}
       />
       <h1
-        className="text-center text-[10px] cursor-pointer"
+        className="text-center text-[10px] cursor-pointer text-red-500"
         title="A profile pic increases authenticity"
+        onClick={() => navigate("/about/#q2")}
       >
         Why Image?
       </h1>
@@ -152,6 +154,35 @@ export default function UserRegister(props) {
         placeholder="Email"
         onChange={HandleChange}
       />
+      {UserType !== "org" && (
+        <>
+          <h1 className="text-center"> Gender</h1>
+          <h1
+            className="text-center text-[10px] mt-[-1px] cursor-pointer text-red-400"
+            onClick={() => navigate("/about/#q1")}
+          >
+            why?
+          </h1>
+
+          <div className="flex justify-around">
+            <label>
+              <input type="radio" name="Gender" value="Male" />
+              Male
+              <input type="radio" name="Gender" value="Female" />
+              Female
+              <input type="radio" name="Gender" value="Futanari" />
+              Futanari
+              <input
+                type="radio"
+                name="Gender"
+                value="not-say"
+                checked={Gender === "0"}
+              />
+              Skip
+            </label>
+          </div>
+        </>
+      )}
 
       <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px]">
         <input

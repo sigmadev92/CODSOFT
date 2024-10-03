@@ -8,9 +8,10 @@ import { deleteAuth } from "../redux/slice/userSlice";
 export default function Navbar() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const link = window.location.pathname;
   const [hideLinks, setHideLinks] = useState(true);
   const linksClass =
-    "text-white px-2 border-[2px] border-[blue] cursor-pointer md:hover:bg-black hover:bg-red-300";
+    "text-white px-2 border-[2px] border-[blue] md:border-none cursor-pointer md:hover:bg-black hover:bg-red-300";
 
   const navigate = useNavigate();
   return (
@@ -33,7 +34,7 @@ export default function Navbar() {
           gap-x-2  md:flex md:visible md:flex-row md:relative md:bg-transparent md:mt-0`}
         >
           <li
-            className={linksClass}
+            className={`${linksClass} ${link === "/" && "bg-black"}`}
             onClick={() => {
               setHideLinks(true);
               navigate("/");
@@ -42,7 +43,7 @@ export default function Navbar() {
             Home
           </li>
           <li
-            className={linksClass}
+            className={`${linksClass} ${link === "/jobs" && "bg-black"}`}
             onClick={() => {
               setHideLinks(true);
               navigate("/jobs");
@@ -54,13 +55,15 @@ export default function Navbar() {
           {user.loggedIn ? (
             <>
               <li
-                className={linksClass}
+                className={`${linksClass} ${
+                  link.includes("dashboard") && "bg-black"
+                }`}
                 onClick={() => {
                   setHideLinks(true);
-                  navigate(`/profile/${user.userData.USER_ID}`);
+                  navigate("/dashboard/");
                 }}
               >
-                My Profile
+                Dashboard
               </li>
               <li
                 className={linksClass}
@@ -76,7 +79,7 @@ export default function Navbar() {
             </>
           ) : (
             <li
-              className={linksClass}
+              className={`${linksClass} ${link === "/login" && "bg-black"}`}
               onClick={() => {
                 setHideLinks(true);
                 navigate("/login");
@@ -87,7 +90,7 @@ export default function Navbar() {
           )}
 
           <li
-            className={linksClass}
+            className={`${linksClass} ${link === "/about" && "bg-black"}`}
             onClick={() => {
               setHideLinks(true);
               navigate("/about");

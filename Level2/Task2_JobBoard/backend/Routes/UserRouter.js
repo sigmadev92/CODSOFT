@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import Users from "../Models/Users.js";
 import upload from "../Config/multerConfig.js";
 import bcrypt from "bcrypt";
@@ -141,6 +141,29 @@ UserRouter.get("/details/:user_id", async (req, res) => {
     res.send({
       status: false,
       message: error.message,
+    });
+  }
+});
+
+UserRouter.get("/data", async (req, res) => {
+  console.log(req.headers.profile);
+  try {
+    const user = await Users.findOne({ USER_ID: req.headers.profile });
+    if (user) {
+      return res.send({
+        status: true,
+        data: user,
+      });
+    }
+    res.send({
+      status: false,
+      message: "ERR_INVALID_USER_ID",
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: "ERR_DB_CONN",
     });
   }
 });
