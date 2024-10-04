@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export default function JobPost() {
   const user = useSelector((state) => state.user);
-  const navigate = useNavigate();
   const [details, setDetails] = useState({
     JobType: "full-time",
     Paid: "no",

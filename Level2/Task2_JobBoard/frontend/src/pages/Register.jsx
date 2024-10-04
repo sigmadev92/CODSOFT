@@ -58,7 +58,7 @@ export default function Register() {
       </div>
       <button
         type="button"
-        className="text-gray-900 bg-green-600 px-2 ml-3 my-1"
+        className="text-gray-900 bg-green-600 px-2 ml-3 my-1 rounded-md hover:bg-green-500 "
         onClick={() => setHidden(false)}
       >
         {" "}

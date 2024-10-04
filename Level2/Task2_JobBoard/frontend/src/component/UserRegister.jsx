@@ -4,7 +4,10 @@ import recruiterImg from "./images/recruiter-image.png";
 import orgImg from "./images/org-image.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ImageDemo2 from "./ImageDemo2";
+
 export default function UserRegister(props) {
+  const [imageDive, setImageDiv] = useState(false);
   const navigate = useNavigate();
   const [passwordHidden, setpaswordHIdden] = useState(true);
 
@@ -21,8 +24,17 @@ export default function UserRegister(props) {
     Email: "",
     PhoneNumber: "",
     Password: "",
+    BirthDate: "",
   });
-  const { UserType, Fullname, Gender, Email, PhoneNumber, Password } = details;
+  const {
+    UserType,
+    Fullname,
+    Gender,
+    Email,
+    PhoneNumber,
+    Password,
+    BirthDate,
+  } = details;
 
   //USER_ID and Posts are inserted at run time
   //ProfilePic is changed by different hook
@@ -90,7 +102,7 @@ export default function UserRegister(props) {
       .catch((err) => console.log(err));
   }
   return (
-    <form onSubmit={HandleSubmit} className="block">
+    <form onSubmit={HandleSubmit} className="block h-[250px] overflow-y-scroll">
       <img
         src={imgToBedisp}
         alt="You Profile pic"
@@ -98,45 +110,24 @@ export default function UserRegister(props) {
         onClick={() => console.log(UserType)}
       />
       <h1
-        className="text-center text-[10px] cursor-pointer text-red-500"
+        className="text-center text-[10px] cursor-pointer text-red-500 hover:bg-blue"
         title="A profile pic increases authenticity"
         onClick={() => navigate("/about/#q2")}
       >
         Why Image?
       </h1>
-      <div className="flex justify-center bg-black ">
-        <label htmlFor="profile" className="text-white font-serif text-[10px]">
-          Profile Picture
-          <input
-            className="text-[10px]"
-            type="file"
-            name="image"
-            id="profile"
-            onChange={(event) => {
-              const file = event.target.files[0];
-              const extnsion = file.name.slice(-3);
-              console.log(extnsion);
-
-              if (
-                extnsion !== "jpg" &&
-                extnsion !== "png" &&
-                file.name.slice(-4) !== "jpeg"
-              ) {
-                alert("Only png or jpg/jpeg allowed");
-                event.target.value = null;
-                return;
-              }
-
-              const reader = new FileReader();
-              reader.onload = (e) => setImage(e.target.result);
-              reader.readAsDataURL(file);
-              console.log(event.target.files[0]);
-              setProfilePic(event.target.files[0]);
-            }}
-            required
-          />
-        </label>
+      <div className="flex justify-center bg-black p-2">
+        <button
+          type="button"
+          className="text-white font-mono bg-green-500 px-2 text-[12px] hover:bg-green-700 rounded-md"
+          onClick={() => setImageDiv(true)}
+        >
+          Upload Image
+        </button>
       </div>
+      {imageDive && (
+        <ImageDemo2 fn={{ setImageDiv, setImage, setProfilePic }} />
+      )}
 
       <input
         className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
@@ -146,6 +137,17 @@ export default function UserRegister(props) {
         placeholder="Full Name "
         onChange={HandleChange}
       />
+      <label>
+        <h1 className="mx-4 font-sans ">Enter your Birth Date : </h1>
+        <input
+          className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
+          type="date"
+          name="BirthDate"
+          value={BirthDate}
+          placeholder="Birth date"
+          onChange={HandleChange}
+        />
+      </label>
       <input
         className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
         type="email"
@@ -156,9 +158,9 @@ export default function UserRegister(props) {
       />
       {UserType !== "org" && (
         <>
-          <h1 className="text-center"> Gender</h1>
+          <h1 className="text-center font-bold font-serif"> Gender</h1>
           <h1
-            className="text-center text-[10px] mt-[-1px] cursor-pointer text-red-400"
+            className="text-center text-[10px] mt-[-1px] cursor-pointer text-red-400 hover:text-black font-bold"
             onClick={() => navigate("/about/#q1")}
           >
             why?
@@ -166,16 +168,38 @@ export default function UserRegister(props) {
 
           <div className="flex justify-around">
             <label>
-              <input type="radio" name="Gender" value="Male" />
+              <input
+                type="radio"
+                name="Gender"
+                value="Male"
+                onChange={HandleChange}
+              />
               Male
-              <input type="radio" name="Gender" value="Female" />
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="Gender"
+                value="Female"
+                onChange={HandleChange}
+              />
               Female
-              <input type="radio" name="Gender" value="Futanari" />
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="Gender"
+                value="Futanari"
+                onChange={HandleChange}
+              />
               Futanari
+            </label>
+            <label>
               <input
                 type="radio"
                 name="Gender"
                 value="not-say"
+                onChange={HandleChange}
                 checked={Gender === "0"}
               />
               Skip
@@ -265,13 +289,14 @@ export default function UserRegister(props) {
           />
         </>
       )}
-
-      <button
-        type="submit"
-        className="block w-full bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-t-2 border-black font-serif"
-      >
-        Register
-      </button>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="px-2 mb-2 bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-2 border-black font-serif"
+        >
+          Register
+        </button>
+      </div>
     </form>
   );
 }

@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Jobs from "./pages/Jobs";
 import About from "./pages/About";
-
+import "react-image-crop/dist/ReactCrop.css";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchUser } from "./redux/slice/userSlice";
