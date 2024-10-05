@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import { fetchUser } from "./redux/slice/userSlice";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -22,6 +24,18 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar />
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

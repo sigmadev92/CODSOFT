@@ -53,7 +53,7 @@ export default function Login() {
           <Link to="/register" className="hover:text-[blue]">
             Don't have an account ? Register
           </Link>
-          <Link to="forgot-password" className="hover:text-[red]">
+          <Link to="/forgot-password" className="hover:text-[red]">
             Forgot Password
           </Link>
         </div>

@@ -3,6 +3,8 @@ import Users from "../Models/Users.js";
 import upload from "../Config/multerConfig.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import gererator from "generate-password";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 const UserRouter = express.Router();
@@ -14,6 +16,7 @@ UserRouter.get("/", (req, res) => {
 const saltRounds = Number(process.env.SALTROUNDS);
 const salt = await bcrypt.genSalt(saltRounds);
 
+//ROUTE-1 REGISTRATION
 UserRouter.post(
   "/register",
   upload.fields([
@@ -166,5 +169,124 @@ UserRouter.get("/data", async (req, res) => {
       message: "ERR_DB_CONN",
     });
   }
+});
+
+UserRouter.get("/forget-password", async (req, res) => {
+  console.log("reacherd here", req.headers.email);
+  const UserEmail = await Users.findOne({ Email: req.headers.email });
+  if (!UserEmail) {
+    return res.send({
+      status: false,
+      message: "ERROR_INVALID_EMAIL",
+    });
+  }
+
+  ///IF USER FOUND THEN WE HAVE TO SEND A TEMPORARY PASSWORD TO THIS EMAIL and STORE THIS TEMP_PASSWORD in THE DB.
+
+  //step-1 CREATE A TEMPORARY PASSWORD using generate-password library
+
+  const password = gererator.generate({
+    length: 10,
+    numbers: true,
+    uppercase: true,
+    lowercase: true,
+    symbols: "#$@_",
+    strict: true,
+  });
+
+  console.log("stp-1 done");
+  //step-2 Hash this password
+  const hashedPassword = await bcrypt.hash(password, salt);
+  try {
+    await Users.updateOne(
+      { Email: req.headers.email },
+      { $set: { Password: hashedPassword } }
+    );
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+
+  console.log("step-2 done");
+
+  //Pasword is stored in DB. We have to send it to Email of user using nodemailer
+
+  //Approach-1 with the testing account
+  /*
+  {
+  const testAccount = await nodemailer.createTestAccount();
+  const transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass,
+    },
+  });
+
+  let message = {
+    from: "",
+    to: "madularscorpian194@gmail.com",
+    subject: "password change",
+    text: `password is ${password}`,
+    html: "",
+  };
+
+  transporter
+    .sendMail(message)
+    .then((info) => {
+      return res.status(201).json({
+        status: true,
+        msg: "you should recieve an email",
+        info: info.messageId,
+        preview: nodemailer.getTestMessageUrl(info),
+      });
+    })
+    .catch((error) => {
+      return res.status(500).json({ error });
+    });
+  }
+    */
+  //Approach with a real account
+  let config = {
+    service: "gmail",
+    auth: {
+      user: process.env.MY_EMAIL,
+      pass: process.env.APP_PASSWORD,
+    },
+  };
+  let transporter = nodemailer.createTransport(config);
+  // let MailGenerator = new Mailgen({
+  //   theme:"default",
+  //   product:{
+  //     name:"Mailgen",
+  //     link:"https://mailgen.js",
+  //   }
+  // })
+  let message = {
+    from: process.env.MY_EMAIL,
+    to: req.headers.email,
+    subject: "Alert! Your Password is Changed",
+    html: `<P>Dear ${UserEmail.FullName} <br/>Your new password is ${password}. Do not share it with anyone. You can change it later in dashboard .<br/>Team JobSoft</p>`,
+  };
+
+  transporter
+    .sendMail(message)
+    .then(() => {
+      return res.send({
+        status: true,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({
+        status: false,
+        message: "ERROR_SERVER_TO_MAIL_ERROR",
+      });
+    });
 });
 export default UserRouter;

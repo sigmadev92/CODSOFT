@@ -52,14 +52,16 @@ export default function Register() {
         <Link to="/login" className="hover:text-[blue]">
           Already have an account ? Login
         </Link>
-        <Link to="forgot-password" className="hover:text-[red]">
+        <Link to="/forgot-password" className="hover:text-[red]">
           Forgot Password
         </Link>
       </div>
       <button
         type="button"
         className="text-gray-900 bg-green-600 px-2 ml-3 my-1 rounded-md hover:bg-green-500 "
-        onClick={() => setHidden(false)}
+        onClick={() => {
+          setHidden(false);
+        }}
       >
         {" "}
         Proceed

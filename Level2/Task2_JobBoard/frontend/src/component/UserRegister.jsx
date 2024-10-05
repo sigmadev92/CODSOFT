@@ -5,6 +5,7 @@ import orgImg from "./images/org-image.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ImageDemo2 from "./ImageDemo2";
+import { toast } from "react-toastify";
 
 export default function UserRegister(props) {
   const [imageDive, setImageDiv] = useState(false);
@@ -68,6 +69,10 @@ export default function UserRegister(props) {
 
   function HandleSubmit(event) {
     event.preventDefault();
+    if (!profilePic) {
+      toast.warn("Please add your profile picture");
+      return;
+    }
     const USER_ID = UserType + "-" + Date.now();
     const formData = new FormData();
     //first insert common data
@@ -96,10 +101,15 @@ export default function UserRegister(props) {
       .then((response) => {
         console.log(response.data);
         if (response.data.status) {
-          navigate("/login");
+          toast.success("You are Registered Successfully");
+          return navigate("/login");
         }
+        toast.error("Registration Failed");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast("SERVER ERROR");
+        console.log(err);
+      });
   }
   return (
     <form onSubmit={HandleSubmit} className="block h-[250px] overflow-y-scroll">

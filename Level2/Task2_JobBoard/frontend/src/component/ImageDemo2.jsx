@@ -51,7 +51,7 @@ export default function ImageDemo2(props) {
   }
 
   return (
-    <div className="w-[80%] absolute h-[80%] top-[60px] bg-slate-600 rounded-lg md:left-[100px] overflow-y-auto">
+    <div className="w-[80%] absolute h-[80%] top-[60px] bg-slate-600 rounded-lg md:left-[100px] overflow-y-auto z-20">
       <div className="flex justify-between bg-slate-500 rounded-t-lg">
         <input
           type="file"
@@ -62,7 +62,7 @@ export default function ImageDemo2(props) {
         <button
           type="button"
           className="mr-10 hover:bg-red-600 text-white font-bold px-3"
-          onClick={() => props.fn(false)}
+          onClick={() => props.fn.setImageDiv(false)}
         >
           X
         </button>
