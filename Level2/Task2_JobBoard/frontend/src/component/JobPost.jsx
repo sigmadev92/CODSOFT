@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-export default function JobPost() {
+import { toast } from "react-toastify";
+import { sectors } from "./functionsJs/JobClassification.js";
+export default function JobPost(props) {
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [details, setDetails] = useState({
+    Sector: "Agriculture",
+    Industry: "Crop Production",
+    Department: "Crop Management",
     JobType: "full-time",
     Paid: "no",
     InternSalary: "",
@@ -12,17 +19,19 @@ export default function JobPost() {
     Title: "",
     CompanyName: "",
     Experience: "",
+    Education: "",
     MustHaveSkills: "",
     GoodToHaveSkills: "",
     SalaryToDisclose: "no",
     Salary: "",
     Preference: "none",
-    Department: "",
-
     About: "",
   });
 
   const {
+    Sector,
+    Industry,
+    Department,
     JobType,
     Paid,
     InternSalary,
@@ -32,10 +41,10 @@ export default function JobPost() {
     SalaryToDisclose,
     Salary,
     Experience,
+    Education,
     MustHaveSkills,
     GoodToHaveSkills,
     Preference,
-    Department,
     Cities,
     About,
   } = details;
@@ -59,10 +68,11 @@ export default function JobPost() {
       .post("http://localhost:1008/jobs/add", details)
       .then((response) => {
         if (response.data.status) {
-          alert("Job added successfully");
-          window.location.reload();
+          toast.success("Job Added Successfully");
+          props.funs.setTab("1");
+          props.funs.setJobPost(false);
         } else {
-          alert("Something went wrong");
+          toast.error(response.data.message);
         }
       })
       .catch((err) => {
@@ -86,6 +96,69 @@ export default function JobPost() {
         <h1 className="ml-5 font-semibold text-sm text-center">
           {user.userData.FullName}
         </h1>
+        <div className="flex ml-3 gap-x-2 text-[12px]">
+          Select Sector
+          <select
+            name="Sector"
+            onChange={(e) => {
+              setDetails((prev) => ({
+                ...prev,
+                Sector: e.target.value,
+                Industry: sectors.find((sector) => sector.Name === Sector)
+                  .Industries[0],
+                Department: sectors.find((sector) => sector.Name === Sector)
+                  .Departments[0],
+              }));
+            }}
+          >
+            {sectors.map((sector, index) => {
+              return (
+                <option value={sector.Name} key={index}>
+                  {sector.Name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="flex ml-3 gap-x-2 mt-2 text-[12px]">
+          Select Industry
+          <select name="Industry" onChange={handleChange}>
+            {sectors
+              .find((sector) => {
+                return sector.Name === Sector;
+              })
+              .Industries.map((industry, index) => {
+                return (
+                  <option value={industry} key={index}>
+                    {industry}
+                  </option>
+                );
+              })}{" "}
+          </select>
+        </div>
+        {/* <button
+          type="button"
+          onClick={() => console.log(Industry, Sector, Department)}
+        >
+          check
+        </button> */}
+        <div className="flex ml-3 gap-x-1 mt-2 text-[12px]">
+          Select Department
+          <select name="Department" onChange={handleChange}>
+            {sectors
+              .find((sector) => {
+                return sector.Name === Sector;
+              })
+              .Departments.map((dept, index) => {
+                return (
+                  <option value={dept} key={index}>
+                    {dept}
+                  </option>
+                );
+              })}{" "}
+          </select>
+        </div>
+
         {user.userData.UserType === "recruiter" && (
           <input
             type="text"
@@ -227,6 +300,15 @@ export default function JobPost() {
         />
         <input
           type="text"
+          name="Education"
+          placeholder="Minimum Educational Qualifications"
+          className="w-[90%] mx-auto block px-4 border-black border-[2px]"
+          value={Education}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
           name="MustHaveSkills"
           placeholder="Must have skills (sparate by commas)"
           className="w-[90%] mx-auto block px-4 border-black border-[2px]"
@@ -315,15 +397,6 @@ export default function JobPost() {
             None
           </label>
         </div>
-        <input
-          type="text"
-          name="Department"
-          placeholder="Department"
-          className="w-[90%] mx-auto block px-4 border-black border-[2px]"
-          value={Department}
-          onChange={handleChange}
-          required
-        />
 
         <textarea
           name="About"

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { setAuth } from "../redux/slice/userSlice";
+import { toast } from "react-toastify";
 export default function UserLogin(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ export default function UserLogin(props) {
         if (response.data.status) {
           localStorage.setItem("jwt", response.data.jwt);
           dispatch(setAuth(response.data.userData));
+          toast.success("Logged In successfully");
           navigate("/");
           // window.location.reload();
         } else {

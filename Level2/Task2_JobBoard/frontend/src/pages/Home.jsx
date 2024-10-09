@@ -1,37 +1,46 @@
 import React from "react";
+import imgdiv1 from "../component/images/office.jpeg";
 import "./Home.css";
+
 export default function Home() {
   // const [user, setUser] = useState({});
 
   return (
     <>
-      <div className="w-full m-auto p-3 bg-slate-500 text-white" id="main">
-        <h1 className="text-center font-thin text-[40px] cursor-pointer ">
-          CodSoft Presents
-        </h1>
-        <h1 className="text-center text-[60px] font-black">
-          <span className="text-black">Job</span>Soft
-        </h1>
-        <h1 className="text-center" id="italic">
-          India's Leading Platform for Job and Talent Hunt
-        </h1>
-      </div>
-      {/* {Object.keys(user).length !== 0 && (
-        <h1 className="text-center font-mono bg-black text-[aqua]">
-          {user.FullName.split(" ")[0]}
-        </h1>
-      )} */}
-      <h1 className="text-center font-mono mt-3">
-        Everything according to your interest
-      </h1>{" "}
-      <div className="w-[70%] m-auto p-3 rounded-[10px]">
-        <ul className="flex md:gap-x-4 justify-center flex-wrap gap-3">
-          <li>Full Time</li>
-          <li>Part Time</li>
-          <li>Internship</li>
-          <li>Onsite</li>
-          <li>Remote</li>
-        </ul>
+      <img src={imgdiv1} alt="div-1" className="absolute -z-10 " />
+      <div className="make-blur">
+        <div className="w-full flex justify-center p-3 ">
+          <div className="p-3 ">
+            <h1 className="">
+              <span className="font-serif text-[100px] md:text-[120px] font-bold text-green-500">
+                Job
+              </span>
+              <span className="font-serif text-[100px] md:text-[120px] font-bold text-white">
+                Soft
+              </span>
+            </h1>
+            <h1 className=" text-[20px] italic text-[aqua] text-center ">
+              India's largest platform for talent hunt
+            </h1>
+          </div>
+        </div>
+
+        <div className="">
+          <h1 className="text-center text-white font-bold text-[30px]">
+            Who We are ?
+          </h1>
+          <h1 className="text-center text-white font-bold text-[30px]">
+            Top Talents world wide
+          </h1>
+
+          <h1 className="text-center text-white font-bold text-[30px]">
+            Trusted by Top Organizations
+          </h1>
+
+          <h1 className="text-center text-white font-bold text-[30px]">
+            Recommended by Experienced Recruiters
+          </h1>
+        </div>
       </div>
     </>
   );

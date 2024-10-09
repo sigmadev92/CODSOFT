@@ -18,7 +18,7 @@ export default function Jobs() {
             setJobs(res.data.data);
           } else console.log(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err), "ERROR IN JOBS PAGE");
     }
 
     fetch();
@@ -58,9 +58,15 @@ export default function Jobs() {
       </div>
 
       {tab === "1" && (
-        <div>
-          <h1 className="bg-white">{jobs.length}</h1>
-          <div className="flex flex-nowrap">
+        <div className="">
+          <div className="flex gap-x-4">
+            <h1 className="bg-white">Total Jobs : {jobs.length}</h1>
+            <h1>
+              Your applies : {user.loggedIn && user.userData.Applies.length}
+            </h1>
+          </div>
+
+          <div className="flex  flex-wrap justify-start md:w-[90%] m-auto">
             {jobs.length > 0 &&
               jobs.map((job, index) => {
                 return <JobCard key={index} data={job} />;
@@ -68,7 +74,7 @@ export default function Jobs() {
           </div>
         </div>
       )}
-      {jobPost && tab === "2" && <JobPost />}
+      {jobPost && tab === "2" && <JobPost funs={{ setTab, setJobPost }} />}
     </div>
   );
 }

@@ -11,6 +11,7 @@ export default function UserRegister(props) {
   const [imageDive, setImageDiv] = useState(false);
   const navigate = useNavigate();
   const [passwordHidden, setpaswordHIdden] = useState(true);
+  const [autoGenEmailPass, setAutoGenEmailPass] = useState(false);
 
   //We have total 13 fileds in database.
   // 8 are common for every type of user
@@ -27,15 +28,8 @@ export default function UserRegister(props) {
     Password: "",
     BirthDate: "",
   });
-  const {
-    UserType,
-    Fullname,
-    Gender,
-    Email,
-    PhoneNumber,
-    Password,
-    BirthDate,
-  } = details;
+  var { UserType, FullName, Gender, Email, PhoneNumber, Password, BirthDate } =
+    details;
 
   //USER_ID and Posts are inserted at run time
   //ProfilePic is changed by different hook
@@ -67,8 +61,19 @@ export default function UserRegister(props) {
     }));
   };
 
-  function HandleSubmit(event) {
+  async function HandleSubmit(event) {
     event.preventDefault();
+    if (Array.from(FullName.split(" ")).length === 1) {
+      return toast.warn(
+        "First naame, middle name and lastname should be separated by space"
+      );
+    }
+    if (Array.from(FullName.split(" ")).length > 3) {
+      return toast.warn(
+        "Please use only First name, middle name(optional) and last name"
+      );
+    }
+
     if (!profilePic) {
       toast.warn("Please add your profile picture");
       return;
@@ -95,7 +100,32 @@ export default function UserRegister(props) {
       formData.append("JobRole", JobRole);
     }
 
-    console.log(formData);
+    formData.append("AUTO_GENERATED", autoGenEmailPass);
+    if (autoGenEmailPass && details.Email === "") {
+      console.log("arrived here at main prob");
+      const names = Array.from(FullName.split(" "));
+      const n = names.length;
+      console.log(names);
+      const fname = names[0].toLowerCase();
+      const lname = names[n - 1].toLowerCase();
+      const tempEmail =
+        fname +
+        lname +
+        fname.charCodeAt(0) +
+        lname.charCodeAt(0) +
+        "@gmail.com";
+
+      const TempPassword = tempEmail.split("@")[0] + "123";
+      setDetails((prev) => ({
+        ...prev,
+        Email: tempEmail,
+        Password: TempPassword,
+      }));
+      formData.set("Email", tempEmail);
+      formData.set("Password", TempPassword);
+      console.log(details);
+    }
+
     axios
       .post("http://localhost:1008/users/register", formData)
       .then((response) => {
@@ -143,29 +173,61 @@ export default function UserRegister(props) {
         className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
         type="text"
         name="FullName"
-        value={Fullname}
+        value={FullName}
         placeholder="Full Name "
         onChange={HandleChange}
       />
-      <label>
-        <h1 className="mx-4 font-sans ">Enter your Birth Date : </h1>
+      {UserType !== "org" && (
+        <label>
+          <h1 className="mx-4 font-sans ">Enter your Birth Date : </h1>
+          <input
+            className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
+            type="date"
+            name="BirthDate"
+            value={BirthDate}
+            placeholder="Birth date"
+            onChange={HandleChange}
+          />
+        </label>
+      )}
+
+      <label className="ml-3">
         <input
-          className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-          type="date"
-          name="BirthDate"
-          value={BirthDate}
-          placeholder="Birth date"
-          onChange={HandleChange}
+          type="checkbox"
+          onClick={() => setAutoGenEmailPass((prev) => !prev)}
         />
+        <span className="text-center">Auto Generate Email and password</span>
       </label>
-      <input
-        className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-        type="email"
-        name="Email"
-        value={Email}
-        placeholder="Email"
-        onChange={HandleChange}
-      />
+      {!autoGenEmailPass && (
+        <>
+          <input
+            className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
+            type="email"
+            name="Email"
+            value={Email}
+            placeholder="Email"
+            onChange={HandleChange}
+          />
+          <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px]">
+            <input
+              className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
+              type={passwordHidden ? "password" : "text"}
+              name="Password"
+              value={Password}
+              placeholder="Password"
+              onChange={HandleChange}
+            />
+            <button
+              type="button"
+              className=" border-2 bg-red-400 border-black h-fit mt-[10px] px-2 hover:bg-[aqua]"
+              onClick={() => setpaswordHIdden((prev) => !prev)}
+            >
+              TE
+            </button>
+          </div>
+        </>
+      )}
+
       {UserType !== "org" && (
         <>
           <h1 className="text-center font-bold font-serif"> Gender</h1>
@@ -217,24 +279,6 @@ export default function UserRegister(props) {
           </div>
         </>
       )}
-
-      <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px]">
-        <input
-          className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
-          type={passwordHidden ? "password" : "text"}
-          name="Password"
-          value={Password}
-          placeholder="Password"
-          onChange={HandleChange}
-        />
-        <button
-          type="button"
-          className=" border-2 bg-red-400 border-black h-fit mt-[10px] px-2 hover:bg-[aqua]"
-          onClick={() => setpaswordHIdden((prev) => !prev)}
-        >
-          TE
-        </button>
-      </div>
 
       <input
         className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"

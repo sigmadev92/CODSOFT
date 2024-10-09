@@ -17,7 +17,9 @@ const UserSchema = mongoose.Schema(
     },
     BirthDate: {
       type: Date,
-      required: true,
+      required: function () {
+        return this.UserType !== "org";
+      },
     },
 
     Email: {

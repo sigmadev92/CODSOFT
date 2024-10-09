@@ -11,11 +11,11 @@ export default function Navbar() {
   const link = window.location.pathname;
   const [hideLinks, setHideLinks] = useState(true);
   const linksClass =
-    "text-white px-2 border-[2px] border-[blue] md:border-none cursor-pointer md:hover:bg-black hover:bg-red-300";
+    "text-white px-2 border-[2px] border-[blue] md:border-none cursor-pointer md:hover:bg-black hover:bg-red-300 rounded-md";
 
   const navigate = useNavigate();
   return (
-    <div className="bg-blue-500 w-full flex justify-between p-2 sticky top-0">
+    <div className="bg-blue-500 w-full flex justify-between p-2 sticky top-0 z-50 ">
       <div id="heading" className="flex ml-[30px] gap-x-2">
         <img
           src={img}
@@ -30,7 +30,9 @@ export default function Navbar() {
       <div id="links" className="mr-[30px] mt-[10px]">
         <ul
           id="navbar-links-sm"
-          className={`absolute mt-[25px] bg-black ${hideLinks && "hidden"}
+          className={`absolute right-3 mt-[25px] bg-black ${
+            hideLinks && "hidden"
+          }
           gap-x-2  md:flex md:visible md:flex-row md:relative md:bg-transparent md:mt-0`}
         >
           <li

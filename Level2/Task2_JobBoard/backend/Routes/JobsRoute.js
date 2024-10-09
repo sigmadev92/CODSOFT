@@ -7,15 +7,16 @@ JobRouter.get("/", (req, res) => {
   res.send("<p>Job Post fetched</p>");
 });
 
-JobRouter.post("/add", (req, res) => {
+JobRouter.post("/add", async (req, res) => {
   console.log(req.body);
   try {
-    const newJob = Jobs(req.body);
-    newJob.save();
+    const newJob = await Jobs(req.body);
+    await newJob.save();
     return res.send({
       status: true,
     });
   } catch (error) {
+    console.log(error);
     res.send({
       status: false,
       message: error.message,

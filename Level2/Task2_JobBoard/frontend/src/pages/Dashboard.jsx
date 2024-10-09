@@ -1,12 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   if (!user.loggedIn) {
-    return <h1>You have no right to access this page.</h1>;
+    return <Navigate to={"/"} />;
   }
   return (
     <div>

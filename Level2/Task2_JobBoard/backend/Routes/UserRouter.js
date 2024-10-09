@@ -24,11 +24,25 @@ UserRouter.post(
     { name: "Resume", maxCount: 1 },
   ]),
   async (req, res) => {
+    if (req.body.Email === process.env.MY_EMAIL) {
+      return res.send({
+        status: false,
+        message: "WARNING_EMAIL_NEVER_USE",
+      });
+    }
+
     try {
-      const userExists = await Users.find({
+      const userExists = await Users.findOne({
         $or: [{ Email: req.body.Email }, { PhoneNumber: req.body.PhoneNumber }],
       });
-      if (userExists.length >= 1) {
+      if (req.body.AUTO_GENERATED && userExists) {
+        console.log("jsdksd");
+        return res.send({
+          status: false,
+          message: "ERR_AUTO_GENE_EMAIL_PASS_SAME_NAME_CONFLICT_CONFUSION",
+        });
+      }
+      if (userExists) {
         return res.send({
           status: false,
           message: "Error: User is already Registered",
@@ -114,11 +128,11 @@ UserRouter.get("/auth", (req, res) => {
           status: true,
           data: response,
         });
-      else
-        res.send({
-          status: false,
-          message: "Authentication denied. ",
-        });
+
+      res.send({
+        status: false,
+        message: "Authentication denied. ",
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -288,5 +302,32 @@ UserRouter.get("/forget-password", async (req, res) => {
         message: "ERROR_SERVER_TO_MAIL_ERROR",
       });
     });
+});
+
+UserRouter.post("/add-job", async (req, res) => {
+  console.log(req.body);
+
+  try {
+    const response = await Users.updateOne(
+      { USER_ID: req.body.userId },
+      { $push: { Applies: req.body.jobId } }
+    );
+    console.log(response);
+    if (response.modifiedCount === 1)
+      res.send({
+        status: true,
+      });
+    else
+      res.send({
+        status: false,
+        message: "Invalid userId or JOb id",
+      });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: "ERR_DB_CONN",
+    });
+  }
 });
 export default UserRouter;

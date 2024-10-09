@@ -13,8 +13,9 @@ import { useEffect } from "react";
 import { fetchUser } from "./redux/slice/userSlice";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import JobDetail from "./pages/JobDetail";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile/:user_id" element={<Profile />} />
+          <Route path="/jobs/:jobid" element={<JobDetail />} />
         </Routes>
         <Footer />
       </BrowserRouter>

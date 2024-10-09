@@ -8,8 +8,8 @@ export default function About() {
       </h1>
       <div className="w-[90%] md:w-[60%] max-w-[400px] mx-auto mt-3">
         <p className="font-serif">
-          This website is a fiction. No such website is ever published by
-          CodSoft.
+          This website is a fiction. No Real Jobs or people. Images are
+          generated with the help of META AI
         </p>
         <p className="font-semibold">
           This website is created by{" "}
@@ -37,7 +37,7 @@ export default function About() {
         </p>
         <p id="q2" className="font-bold">
           {" "}
-          Q2. Why we ask for uploading image?
+          Q2. Why we ask for uploading Profile Picture ?
         </p>
       </div>
     </div>
