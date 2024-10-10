@@ -81,6 +81,9 @@ const UserSchema = mongoose.Schema(
     Applies: {
       type: Array,
     },
+    SavedJobs: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

@@ -39,4 +39,65 @@ JobRouter.get("/get-all", async (req, res) => {
     });
   }
 });
+
+JobRouter.post("/get-applied-jobs", async (req, res) => {
+  console.log("arrived here to fetch applied jobs");
+  console.log(req.body);
+  try {
+    const response = await Jobs.find({
+      _id: { $in: req.body.jobIds },
+    });
+    console.log(response.length);
+    return res.send({
+      status: true,
+      data: response,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+    });
+  }
+});
+
+JobRouter.post("/get-posted-jobs/:user_id", async (req, res) => {
+  console.log(req.params.user_id);
+  try {
+    const response = await Jobs.find({ CreatorInfo: req.params.user_id });
+    console.log(response.length);
+    return res.send({
+      status: true,
+      data: response,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
+JobRouter.delete("/delete-job-post/:job_id", async (req, res) => {
+  console.log(`Id to be deleted ${req.params.job_id}`);
+  try {
+    const response = await Jobs.deleteOne({ _id: req.params.job_id });
+    console.log(response);
+    if (response.deletedCount === 1)
+      return res.send({
+        status: true,
+      });
+
+    return res.send({
+      status: false,
+      message: "Cannot be deleted",
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
 export default JobRouter;

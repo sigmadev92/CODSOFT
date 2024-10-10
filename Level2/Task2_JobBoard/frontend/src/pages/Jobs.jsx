@@ -61,9 +61,11 @@ export default function Jobs() {
         <div className="">
           <div className="flex gap-x-4">
             <h1 className="bg-white">Total Jobs : {jobs.length}</h1>
-            <h1>
-              Your applies : {user.loggedIn && user.userData.Applies.length}
-            </h1>
+            {user.loggedIn && user.userData.UserType === "seeker" && (
+              <h1>
+                Your applies : {user.loggedIn && user.userData.Applies.length}
+              </h1>
+            )}
           </div>
 
           <div className="flex  flex-wrap justify-start md:w-[90%] m-auto">

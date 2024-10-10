@@ -330,4 +330,53 @@ UserRouter.post("/add-job", async (req, res) => {
     });
   }
 });
+UserRouter.post("/save-job", async (req, res) => {
+  console.log(req.body);
+  try {
+    const response = await Users.updateOne(
+      { USER_ID: req.body.user_id },
+      { $push: { SavedJobs: req.body.job_id } }
+    );
+    if (response.modifiedCount === 1)
+      return res.send({
+        status: true,
+      });
+
+    res.send({
+      status: false,
+      message: "Job Cannot be saved successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+UserRouter.post("/unsave-job", async (req, res) => {
+  console.log("Arrived here to unsave the saved job", req.body);
+  try {
+    const response = await Users.updateOne(
+      { USER_ID: req.body.user_id },
+      { $pull: { SavedJobs: req.body.job_id } }
+    );
+    console.log(response);
+    if (response.modifiedCount === 1)
+      return res.send({
+        status: true,
+      });
+
+    res.send({
+      status: false,
+      message: "Job Cannot be unsaved successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
 export default UserRouter;
