@@ -15,7 +15,7 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   return (
-    <div className="bg-blue-500 w-full flex justify-between p-2 sticky top-0 z-50 ">
+    <div className="bg-[#257180] w-full flex justify-between p-2 sticky top-0 z-50 ">
       <div id="heading" className="flex ml-[30px] gap-x-2">
         <img
           src={img}
@@ -23,7 +23,7 @@ export default function Navbar() {
           className="w-[44px]"
         />
         <h1 className="font-serif text-[30px]">
-          <span className="text-gray-800">Job</span>
+          <span className="text-[#FD8B51]">Job</span>
           <span className="text-white">Soft</span>
         </h1>
       </div>

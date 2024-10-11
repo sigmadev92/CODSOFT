@@ -1,13 +1,17 @@
 import React from "react";
-import imgdiv1 from "../component/images/office.jpeg";
 import "./Home.css";
-
+import Org from "../component/home/Org";
+import Recruiter from "../component/home/Recruiter";
+import bg from "../component/images/register.jpeg";
+import Talent from "../component/home/Talent";
+import WhoWeare from "../component/home/WhoWeare";
+import WhyUs from "../component/home/WhyUs";
 export default function Home() {
   // const [user, setUser] = useState({});
 
   return (
     <>
-      <img src={imgdiv1} alt="div-1" className="absolute -z-10 " />
+      <img src={bg} alt="back-ground" className="absolute -z-10 blur-xl" />
       <div className="make-blur">
         <div className="w-full flex justify-center p-3 ">
           <div className="p-3 ">
@@ -24,22 +28,27 @@ export default function Home() {
             </h1>
           </div>
         </div>
-
+        <hr className="h-2 my-5" />
         <div className="">
-          <h1 className="text-center text-white font-bold text-[30px]">
-            Who We are ?
-          </h1>
-          <h1 className="text-center text-white font-bold text-[30px]">
+          <h1 className="text-center font-bold text-[30px]">Who We are ?</h1>
+          <WhoWeare />
+          <hr className="h-2 my-5" />
+          <h1 className="text-center  font-bold text-[30px]">
             Top Talents world wide
           </h1>
+          <Talent />
+          <hr className="h-2 my-5" />
 
-          <h1 className="text-center text-white font-bold text-[30px]">
+          <h1 className="text-center  font-bold text-[30px]">
             Trusted by Top Organizations
           </h1>
-
-          <h1 className="text-center text-white font-bold text-[30px]">
+          <Org />
+          <hr className="h-2 my-5" />
+          <h1 className="text-center font-bold text-[30px]">
             Recommended by Experienced Recruiters
           </h1>
+          <Recruiter />
+          <WhyUs />
         </div>
       </div>
     </>

@@ -4,7 +4,7 @@ import Jobs from "../Models/Job.js";
 const JobRouter = express.Router();
 
 JobRouter.get("/", (req, res) => {
-  res.send("<p>Job Post fetched</p>");
+  res.json(req.headers);
 });
 
 JobRouter.post("/add", async (req, res) => {
@@ -40,9 +40,8 @@ JobRouter.get("/get-all", async (req, res) => {
   }
 });
 
-JobRouter.post("/get-applied-jobs", async (req, res) => {
-  console.log("arrived here to fetch applied jobs");
-  console.log(req.body);
+JobRouter.post("/get-jobs", async (req, res) => {
+  console.log(`${Date()} ${req.body.task}`);
   try {
     const response = await Jobs.find({
       _id: { $in: req.body.jobIds },

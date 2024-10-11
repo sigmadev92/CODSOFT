@@ -33,11 +33,26 @@ export default function About() {
         <h1 className="font-bold text-[25px]">FAQs</h1>
         <p id="q1" className="font-bold">
           {" "}
-          Q1. Why we ask about Gender?
+          Q1. Why do we ask about Gender?
+        </p>
+        <p>
+          <span className="text-[blue] mr-3">Ans.</span>Only recruiter and job
+          seekers are asked about the gender. We ask for gender as many
+          recruiters and orgs provide gender specific jobs. If you are male and
+          the job is for women candidates only then it will be shown on your
+          feed too which you won't like. Also gender is a must data for
+          recruiters and orgs. To get better acknowledgement, you must put your
+          gender. There is no need to hide your gender. We are with you.
         </p>
         <p id="q2" className="font-bold">
           {" "}
-          Q2. Why we ask for uploading Profile Picture ?
+          Q2. Why do we ask for uploading Profile Picture ?
+        </p>
+        <p className="mb-9">
+          <span className="text-[blue]">Ans. </span>Profile picture increases
+          authenticity and chances of being noticed by recruiters. Initially our
+          website had no compulsary field for profile picture but we observed
+          the lacking of trust between both the parties.
         </p>
       </div>
     </div>

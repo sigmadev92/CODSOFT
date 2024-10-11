@@ -379,4 +379,20 @@ UserRouter.post("/unsave-job", async (req, res) => {
     });
   }
 });
+UserRouter.get("/usertype/:user_type", async (req, res) => {
+  console.log(`${Date()} `);
+  try {
+    const response = await Users.find({ UserType: req.params.user_type });
+    return res.send({
+      status: true,
+      data: response,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
 export default UserRouter;

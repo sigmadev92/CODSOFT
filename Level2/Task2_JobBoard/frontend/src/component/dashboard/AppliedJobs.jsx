@@ -13,8 +13,9 @@ export default function AppliedJobs(props) {
   useEffect(() => {
     const function1 = async () => {
       await axios
-        .post("http://localhost:1008/jobs/get-applied-jobs", {
+        .post("http://localhost:1008/jobs/get-jobs", {
           jobIds: user.userData.Applies,
+          task: "Arrived here for getting applied jobs by the Seeker",
         })
         .then((res) => res.data)
         .then((res) => {
