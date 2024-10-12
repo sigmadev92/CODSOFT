@@ -12,6 +12,7 @@ import ambas2 from "../images/ambas-2.jpeg";
 import ceo from "../images/ceo.jpeg";
 import cfo from "../images/cfo.jpeg";
 export default function WhyUs() {
+  //A static component
   const Investorimgs = [investor1, investor2, investor3, investor4, investor5];
   const ambasimgs = [ambas1, ambas2];
   return (

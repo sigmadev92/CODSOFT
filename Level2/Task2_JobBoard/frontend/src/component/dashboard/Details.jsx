@@ -3,6 +3,7 @@ import { LuPanelLeftClose } from "react-icons/lu";
 import { FaUserEdit } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import EditProfile from "./EditProfile";
+import { baseUrl } from "../functionsJs/urls";
 
 export default function Details(props) {
   const user = useSelector((state) => state.user);
@@ -21,7 +22,7 @@ export default function Details(props) {
       </div>
       <div className="bg-white rounded-r-lg mt-5 flex justify-center">
         <img
-          src={`http://localhost:1008/${user.userData.ProfilePic}`}
+          src={`${baseUrl}/${user.userData.ProfilePic}`}
           alt="profile"
           className="w-[150px] h-[150px] rounded-full "
         />
@@ -33,9 +34,7 @@ export default function Details(props) {
       {user.userData.userType === "seeker" && (
         <h1
           className="text-[12px] cursor-pointer hover:text-[aqua]"
-          onClick={() =>
-            window.open(`http://localhost:1008/${user.userData.Resume}`)
-          }
+          onClick={() => window.open(`${baseUrl}/${user.userData.Resume}`)}
         >
           My resume
         </h1>

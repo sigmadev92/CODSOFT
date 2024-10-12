@@ -5,6 +5,7 @@ import Loading from "../Loading";
 import Error from "../Error";
 import axios from "axios";
 import JobCard from "../JobCard";
+import { jobsUrl } from "../functionsJs/urls";
 export default function SavedJobs(props) {
   const user = useSelector((state) => state.user);
   const [isLoading, setIsloading] = useState(true);
@@ -13,7 +14,7 @@ export default function SavedJobs(props) {
   useEffect(() => {
     const function1 = async () => {
       await axios
-        .post("http://localhost:1008/jobs/get-jobs", {
+        .post(`${jobsUrl}/get-jobs`, {
           jobIds: user.userData.SavedJobs,
           task:
             "Arrived here for getting saved jobs. User type -" +

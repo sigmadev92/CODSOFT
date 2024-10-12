@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 
 import { setAuth } from "../redux/slice/userSlice";
 import { toast } from "react-toastify";
+import { usersUrl } from "./functionsJs/urls";
 export default function UserLogin(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function UserLogin(props) {
     event.preventDefault();
 
     axios
-      .post("http://localhost:1008/users/login", details)
+      .post(`${usersUrl}/login`, details)
       .then((response) => {
         console.log(response.data);
         if (response.data.status) {

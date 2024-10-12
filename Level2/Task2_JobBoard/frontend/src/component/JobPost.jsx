@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { sectors } from "./functionsJs/JobClassification.js";
+import { baseUrl, jobsUrl } from "./functionsJs/urls.js";
 export default function JobPost(props) {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ export default function JobPost(props) {
       details.CompanyName = CompanyName;
 
     axios
-      .post("http://localhost:1008/jobs/add", details)
+      .post(`${jobsUrl}/add`, details)
       .then((response) => {
         if (response.data.status) {
           toast.success("Job Added Successfully");
@@ -88,7 +89,7 @@ export default function JobPost(props) {
       <form onSubmit={handleSubmit}>
         <div className="flex justify-center pt-3">
           <img
-            src={`http://localhost:1008/${user.userData.ProfilePic}`}
+            src={`${baseUrl}/${user.userData.ProfilePic}`}
             alt="The org or Recruiter"
             className="w-[50px] h-[50px] rounded-full"
           />

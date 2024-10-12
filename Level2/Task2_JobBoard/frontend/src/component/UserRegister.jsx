@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ImageDemo2 from "./ImageDemo2";
 import { toast } from "react-toastify";
+import { usersUrl } from "./functionsJs/urls";
 
 export default function UserRegister(props) {
   const [imageDive, setImageDiv] = useState(false);
@@ -127,7 +128,7 @@ export default function UserRegister(props) {
     }
 
     axios
-      .post("http://localhost:1008/users/register", formData)
+      .post(`${usersUrl}/register`, formData)
       .then((response) => {
         console.log(response.data);
         if (response.data.status) {

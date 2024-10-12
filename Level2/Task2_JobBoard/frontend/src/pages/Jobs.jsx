@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import JobPost from "../component/JobPost";
 import axios from "axios";
 import JobCard from "../component/JobCard";
+import { jobsUrl } from "../component/functionsJs/urls";
 export default function Jobs() {
   const user = useSelector((state) => state.user);
   const [tab, setTab] = useState("1");
@@ -12,7 +13,7 @@ export default function Jobs() {
   useEffect(() => {
     async function fetch() {
       axios
-        .get("http://localhost:1008/jobs/get-all")
+        .get(`${jobsUrl}/get-all`)
         .then((res) => {
           if (res.data.status) {
             setJobs(res.data.data);

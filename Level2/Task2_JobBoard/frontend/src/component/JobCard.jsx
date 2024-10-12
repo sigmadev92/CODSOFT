@@ -14,6 +14,7 @@ import {
   UnSaveJobPost,
 } from "../redux/slice/userSlice";
 import axios from "axios";
+import { baseUrl, jobsUrl } from "./functionsJs/urls";
 // import axios from "axios";
 
 export default function JobCard(props) {
@@ -35,7 +36,7 @@ export default function JobCard(props) {
     const confirm = window.confirm("Do you really want to delete this job ?");
     if (!confirm) return;
     await axios
-      .delete(`http://localhost:1008/jobs/delete-job-post/${jobDetail._id}`)
+      .delete(`${jobsUrl}/delete-job-post/${jobDetail._id}`)
       .then((res) => res.data)
       .then((res) => {
         if (res.status) {
@@ -78,7 +79,7 @@ export default function JobCard(props) {
         onClick={() => navigate(`/jobs/${jobDetail._id}`)}
       >
         <img
-          src={`http://localhost:1008/${jobDetail.ProfilePic}`}
+          src={`${baseUrl}/${jobDetail.ProfilePic}`}
           alt="Org or recruiter portrait"
           className="w-[40px] h-[40px] my-1 rounded-full"
         />

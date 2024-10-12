@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { usersUrl } from "../component/functionsJs/urls";
 
 export default function ForgotPassword() {
   const [Email, setEmail] = useState("");
@@ -13,7 +14,7 @@ export default function ForgotPassword() {
       return;
     }
     axios
-      .get("http://localhost:1008/users/forget-password", {
+      .get(`${usersUrl}/forget-password`, {
         headers: {
           email: Email,
         },

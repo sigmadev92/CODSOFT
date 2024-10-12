@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { usersUrl } from "../../component/functionsJs/urls";
 
 export const fetchUser = createAsyncThunk("fetchUser", async () => {
   if (localStorage.getItem("jwt") === null)
@@ -8,7 +9,7 @@ export const fetchUser = createAsyncThunk("fetchUser", async () => {
       status: false,
       userData: null,
     };
-  const response = await axios.get("http://localhost:1008/users/auth", {
+  const response = await axios.get(`${usersUrl}/auth`, {
     headers: {
       auth: localStorage.getItem("jwt"),
     },
@@ -17,7 +18,7 @@ export const fetchUser = createAsyncThunk("fetchUser", async () => {
   return response.data;
 });
 export const ApplyToJob = createAsyncThunk("applyButton", async (obj) => {
-  const response = await axios.post("http://localhost:1008/users/add-job", {
+  const response = await axios.post(`${usersUrl}/add-job`, {
     userId: obj.userId,
     jobId: obj.jobId,
   });
@@ -27,20 +28,14 @@ export const ApplyToJob = createAsyncThunk("applyButton", async (obj) => {
   };
 });
 export const SaveJobPost = createAsyncThunk("savebutton", async (obj) => {
-  const response = await axios.post(
-    "http://localhost:1008/users/save-job",
-    obj
-  );
+  const response = await axios.post(`${usersUrl}/save-job`, obj);
   return {
     response: response.data,
     jobId: obj.job_id,
   };
 });
 export const UnSaveJobPost = createAsyncThunk("unsavebutton", async (obj) => {
-  const response = await axios.post(
-    "http://localhost:1008/users/unsave-job",
-    obj
-  );
+  const response = await axios.post(`${usersUrl}/unsave-job`, obj);
   return {
     response: response.data,
     jobId: obj.job_id,

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Error from "../Error";
 import Loading from "../Loading";
+import { baseUrl, usersUrl } from "../functionsJs/urls";
 
 export default function Talent() {
   const [seekerData, setSeekerData] = useState([]);
@@ -10,7 +11,7 @@ export default function Talent() {
   useEffect(() => {
     async function function1() {
       await axios
-        .get("http://localhost:1008/users/usertype/seeker")
+        .get(`${usersUrl}/usertype/seeker`)
         .then((res) => res.data)
         .then((res) => {
           if (res.status) {
@@ -42,7 +43,7 @@ export default function Talent() {
               key={index}
             >
               <img
-                src={`http://localhost:1008/${seeker.ProfilePic}`}
+                src={`${baseUrl}/${seeker.ProfilePic}`}
                 alt="Org Personality"
                 className="w-200 h-200 rounded-lg"
               />

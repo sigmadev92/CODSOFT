@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { jobsUrl } from "../component/functionsJs/urls";
 
 export default function JobDetail() {
   const jobId = window.location.pathname.slice(6);
@@ -8,7 +9,7 @@ export default function JobDetail() {
   const [error, setError] = useState(true);
   useEffect(() => {
     axios
-      .get("http://localhost:1008/jobs/get-details", {
+      .get(`${jobsUrl}/get-details`, {
         headers: {
           job_id: jobId,
         },

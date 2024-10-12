@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Error from "../Error";
 import Loading from "../Loading";
+import { baseUrl, usersUrl } from "../functionsJs/urls";
 
 export default function Recruiter() {
   const [recData, setRecData] = useState([]);
@@ -10,7 +11,7 @@ export default function Recruiter() {
   useEffect(() => {
     async function function1() {
       await axios
-        .get("http://localhost:1008/users/usertype/recruiter")
+        .get(`${usersUrl}/usertype/recruiter`)
         .then((res) => res.data)
         .then((res) => {
           if (res.status) {
@@ -42,7 +43,7 @@ export default function Recruiter() {
               key={index}
             >
               <img
-                src={`http://localhost:1008/${recruiter.ProfilePic}`}
+                src={`${baseUrl}/${recruiter.ProfilePic}`}
                 alt="Org Personality"
                 className="w-200 h-200 rounded-lg"
               />

@@ -4,6 +4,7 @@ import moment from "moment";
 import { MdOutlineWork } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
 import { CgMail } from "react-icons/cg";
+import { baseUrl, usersUrl } from "../component/functionsJs/urls";
 export default function Profile() {
   const user_ID = window.location.pathname.slice(9);
 
@@ -12,7 +13,7 @@ export default function Profile() {
   useEffect(() => {
     function fetch() {
       axios
-        .get("http://localhost:1008/users/data/", {
+        .get(`${usersUrl}/data/`, {
           headers: {
             profile: user_ID,
           },
@@ -36,7 +37,7 @@ export default function Profile() {
             className="p-4 bg-violet-950 w-[80%] mx-auto rounded-b-xl flex justify-between"
           >
             <img
-              src={`http://localhost:1008/${userDetails.ProfilePic}`}
+              src={`${baseUrl}/${userDetails.ProfilePic}`}
               alt="profile"
               className="w-[30%] h-[30%] md:w-[20%] md:h-[20%] rounded-full border-white border-[2px] "
             />

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Error from "../Error";
 import Loading from "../Loading";
+import { baseUrl, usersUrl } from "../functionsJs/urls";
 
 export default function Org() {
   const [orgData, setOrgData] = useState([]);
@@ -10,7 +11,7 @@ export default function Org() {
   useEffect(() => {
     async function function1() {
       await axios
-        .get("http://localhost:1008/users/usertype/org")
+        .get(`${usersUrl}/usertype/org`)
         .then((res) => res.data)
         .then((res) => {
           if (res.status) {
@@ -36,7 +37,7 @@ export default function Org() {
           return (
             <div className="w-[100px]" key={index}>
               <img
-                src={`http://localhost:1008/${org.ProfilePic}`}
+                src={`${baseUrl}/${org.ProfilePic}`}
                 alt="Org Personality"
                 className="w-200 h-200 rounded-lg"
               />

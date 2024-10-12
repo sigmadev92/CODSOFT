@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Loading from "../Loading";
 import Error from "../Error";
 import JobCard from "../JobCard";
+import { jobsUrl } from "../functionsJs/urls";
 export default function AppliedJobs(props) {
   const user = useSelector((state) => state.user);
   const [jobs, setJobs] = useState([]);
@@ -13,7 +14,7 @@ export default function AppliedJobs(props) {
   useEffect(() => {
     const function1 = async () => {
       await axios
-        .post("http://localhost:1008/jobs/get-jobs", {
+        .post(`${jobsUrl}/get-jobs`, {
           jobIds: user.userData.Applies,
           task: "Arrived here for getting applied jobs by the Seeker",
         })

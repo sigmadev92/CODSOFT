@@ -10,6 +10,7 @@ import dev5 from "../images/programer-5.jpeg";
 import dev6 from "../images/programer-6.jpeg";
 import dev7 from "../images/programer-7.jpeg";
 export default function WhoWeare() {
+  // A static component
   const devs = [dev1, dev2, dev3, dev4, dev5, dev6, dev7];
   return (
     <div className=" ">
