@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import JobPost from "../component/JobPost";
 import axios from "axios";
 import JobCard from "../component/JobCard";
-import { jobsUrl } from "../component/functionsJs/urls";
+import { jobsUrl } from "../component/functionsJs/urls.js";
 export default function Jobs() {
   const user = useSelector((state) => state.user);
   const [tab, setTab] = useState("1");
