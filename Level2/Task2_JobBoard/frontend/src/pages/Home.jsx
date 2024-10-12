@@ -16,7 +16,7 @@ export default function Home() {
         <div className="w-full flex justify-center p-3 ">
           <div className="p-3 ">
             <h1 className="">
-              <span className="font-serif text-[100px] md:text-[120px] font-bold text-green-500">
+              <span className="font-serif text-[100px] md:text-[120px] font-bold ">
                 Job
               </span>
               <span className="font-serif text-[100px] md:text-[120px] font-bold text-white">
