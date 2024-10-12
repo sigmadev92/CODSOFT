@@ -40,7 +40,9 @@ export default function JobCard(props) {
       .then((res) => res.data)
       .then((res) => {
         if (res.status) {
-          toast.success("Job deleted successfully");
+          toast.success(
+            "Job deleted successfully. Refresh Once if not updated"
+          );
         } else {
           toast.error("Cannot delete job ");
         }
