@@ -162,10 +162,9 @@ UserRouter.get("/details/:user_id", async (req, res) => {
   }
 });
 
-UserRouter.get("/data", async (req, res) => {
-  console.log(req.headers.profile);
+UserRouter.get("/data/:user_id", async (req, res) => {
   try {
-    const user = await Users.findOne({ USER_ID: req.headers.profile });
+    const user = await Users.findOne({ USER_ID: req.params.user_id });
     if (user) {
       return res.send({
         status: true,

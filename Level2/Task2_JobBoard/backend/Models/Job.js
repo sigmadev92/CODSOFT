@@ -100,13 +100,6 @@ const JobSchema = mongoose.Schema(
 
     About: {
       type: String,
-      required: true,
-    },
-    WhoHasApplied: {
-      type: Array,
-    },
-    WhoHasAppliedTime: {
-      type: Array,
     },
   },
 

@@ -30,6 +30,17 @@ export default function About() {
             CodSoft
           </button>
         </p>
+        <p>
+          Task 1 of the project :{" "}
+          <button
+            className="font-semibold text-[red] hover:text-[blue] pr-3"
+            onClick={() =>
+              window.open("https://tribute-acharya-prashant.netlify.app/")
+            }
+          >
+            Tribute Page
+          </button>
+        </p>
         <h1 className="font-bold text-[25px]">FAQs</h1>
         <p id="q1" className="font-bold">
           {" "}
@@ -53,6 +64,17 @@ export default function About() {
           authenticity and chances of being noticed by recruiters. Initially our
           website had no compulsary field for profile picture but we observed
           the lacking of trust between both the parties.
+        </p>
+        <p id="q3" className="font-bold">
+          {" "}
+          Q3. What are featured jobs?
+        </p>
+        <p className="mb-9">
+          <span className="text-[blue]">Ans. </span>Featured Jobs are those jobs
+          which are checked and fully verified by JobSoft Team on special
+          request from the job provider. Featured jobs are in every field but a
+          job seekers will see only those jobs which are related to their field
+          and interests.
         </p>
       </div>
     </div>

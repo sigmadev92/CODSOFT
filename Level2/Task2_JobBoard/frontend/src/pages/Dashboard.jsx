@@ -9,17 +9,19 @@ import { FcBusinessman } from "react-icons/fc";
 import { TfiWrite } from "react-icons/tfi";
 import SavedJobs from "../component/dashboard/SavedJobs";
 import PostedJobs from "../component/dashboard/PostedJobs";
+import Loading from "../component/Loading";
 export default function Dashboard() {
   const user = useSelector((state) => state.user);
   const [openProfile, setopenProfile] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [openAppliedJobs, setAppliedJObs] = useState(true);
   const [openMyPosts, setMyPosts] = useState(true);
   const [openSavedJobs, setSavedJobs] = useState(true);
   const [openPostedJobs, setPostedJobs] = useState(true);
   // const [appliedJobsData, setAppliedJobsData] = useState([]);
   const navigate = useNavigate();
-  if (!user.loggedIn) {
-    return <Navigate to={"/"} />;
+  if (!user.loggedIn && isLoading) {
+    return <Loading />;
   }
 
   return (

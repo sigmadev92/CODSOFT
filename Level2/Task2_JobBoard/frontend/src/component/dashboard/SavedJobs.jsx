@@ -1,64 +1,69 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { RiFolderCloseFill } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
 import Error from "../Error";
-import axios from "axios";
 import JobCard from "../JobCard";
 import { jobsUrl } from "../functionsJs/urls";
 export default function SavedJobs(props) {
   const user = useSelector((state) => state.user);
   const [isLoading, setIsloading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [savedJobsData, setSaveJobsData] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [error, setError] = useState(false);
+  const jobAction = useSelector((state) => state.jobAction);
   useEffect(() => {
     const function1 = async () => {
+      const Savedjobs = jobAction.records?.filter(
+        (job) =>
+          job.UserId === user.userData.USER_ID && job.ActionType === "save"
+      );
+      const SavedJobIds = [];
+      Savedjobs.forEach((ele) => SavedJobIds.push(ele.JobId));
       await axios
         .post(`${jobsUrl}/get-jobs`, {
-          jobIds: user.userData.SavedJobs,
-          task:
-            "Arrived here for getting saved jobs. User type -" +
-            user.userData.UserType,
+          jobIds: SavedJobIds,
+          task: "Arrived here for getting saved jobs by the Seeker",
         })
         .then((res) => res.data)
         .then((res) => {
           console.log(res);
           if (res.status) {
-            setSaveJobsData(res.data);
+            setJobs(res.data);
+            setIsloading(false);
           } else {
-            setIsError(true);
+            setIsloading(false);
+            setError(true);
           }
-          setIsloading(false);
         })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
-        });
+        .catch((err) => console.log(err));
     };
     function1();
   }, []);
+
   return (
     <div
-      id="saved-jobs"
-      className="w-full min-h-[300px] bg-slate-200 rounded-t-lg "
+      id="applied-jobs"
+      className="w-full min-h-[300px] bg-slate-300 rounded-t-lg md:mb-[100px]"
     >
-      <div className="flex justify-end bg-black rounded-t-lg gap-x-4 px-4">
+      <div className="flex justify-end gap-x-3 bg-black rounded-t-lg px-4">
         <h1 className="text-center font-semibold bg-black text-white text-[12px] rounded-t-lg">
-          Saved Jobs
+          Saved jobs
         </h1>
         <RiFolderCloseFill
-          className="cursor-pointer text-white hover:text-red-700 "
+          className="hover:text-red-700 cursor-pointer text-white"
           onClick={() => props.fn(false)}
         />
       </div>
-      <div className="flex flex-wrap">
-        {isLoading && <Loading />}
-        {isError && <Error />}
-        {savedJobsData.length > 0 &&
-          savedJobsData.map((job, index) => {
+      {isLoading && <Loading />}
+      {error && <Error />}
+      {jobs.length > 0 && (
+        <div className="flex flex-wrap">
+          {jobs.map((job, index) => {
             return <JobCard data={job} key={index} />;
           })}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

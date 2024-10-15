@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { usersUrl } from "../../component/functionsJs/urls";
 
 export const fetchUser = createAsyncThunk("fetchUser", async () => {
@@ -17,30 +16,7 @@ export const fetchUser = createAsyncThunk("fetchUser", async () => {
   console.log(response.data);
   return response.data;
 });
-export const ApplyToJob = createAsyncThunk("applyButton", async (obj) => {
-  const response = await axios.post(`${usersUrl}/add-job`, {
-    userId: obj.userId,
-    jobId: obj.jobId,
-  });
-  return {
-    response: response.data,
-    jobId: obj.jobId,
-  };
-});
-export const SaveJobPost = createAsyncThunk("savebutton", async (obj) => {
-  const response = await axios.post(`${usersUrl}/save-job`, obj);
-  return {
-    response: response.data,
-    jobId: obj.job_id,
-  };
-});
-export const UnSaveJobPost = createAsyncThunk("unsavebutton", async (obj) => {
-  const response = await axios.post(`${usersUrl}/unsave-job`, obj);
-  return {
-    response: response.data,
-    jobId: obj.job_id,
-  };
-});
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -67,31 +43,6 @@ const userSlice = createSlice({
     });
     builders.addCase(fetchUser.rejected, (state, action) => {
       console.log(state.loggedIn, action);
-    });
-    builders.addCase(ApplyToJob.rejected, (state, action) => {
-      return false;
-    });
-    builders.addCase(ApplyToJob.fulfilled, (state, action) => {
-      if (action.payload.response.status) {
-        state.userData.Applies.push(action.payload.jobId);
-      }
-    });
-    builders.addCase(SaveJobPost.fulfilled, (state, action) => {
-      if (action.payload.response.status)
-        state.userData.SavedJobs.push(action.payload.jobId);
-      else toast.error(action.payload.response.message);
-    });
-    builders.addCase(SaveJobPost.rejected, (state, action) => {
-      console.log(action.payload);
-    });
-    builders.addCase(UnSaveJobPost.fulfilled, (state, action) => {
-      if (action.payload.response.status) {
-        const index = state.userData.SavedJobs.indexOf(action.payload.jobId);
-        state.userData.SavedJobs.splice(index, 1);
-      } else toast.error(action.payload.response.message);
-    });
-    builders.addCase(UnSaveJobPost.rejected, (state, action) => {
-      console.log(action.payload);
     });
   },
 });

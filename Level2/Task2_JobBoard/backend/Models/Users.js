@@ -45,7 +45,6 @@ const UserSchema = mongoose.Schema(
     },
     Posts: {
       type: Array,
-      required: true,
     },
     Resume: {
       type: String,
@@ -72,17 +71,8 @@ const UserSchema = mongoose.Schema(
         return this.UserType === "recruiter";
       },
     },
-    JobPostings: {
-      type: Array,
-      required: function () {
-        return this.UserType === "recruiter" || this.UserType === "org";
-      },
-    },
-    Applies: {
-      type: Array,
-    },
-    SavedJobs: {
-      type: Array,
+    About: {
+      type: String,
     },
   },
   { timestamps: true }

@@ -6,71 +6,18 @@ import { BsSaveFill } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import {
-  ApplyToJob,
-  SaveJobPost,
-  UnSaveJobPost,
-} from "../redux/slice/userSlice";
-import axios from "axios";
+import { useSelector } from "react-redux";
+
 import { baseUrl, jobsUrl } from "./functionsJs/urls";
+import ApplyToJob from "./JobCard/ApplyToJob";
+import SaveJob from "./JobCard/SaveJob";
 // import axios from "axios";
 
 export default function JobCard(props) {
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const jobDetail = props.data;
   const navigate = useNavigate();
-  async function handleSaveButton() {
-    dispatch(
-      SaveJobPost({ user_id: user.userData.USER_ID, job_id: jobDetail._id })
-    );
-  }
-  async function handleUnsaveJob() {
-    dispatch(
-      UnSaveJobPost({ job_id: jobDetail._id, user_id: user.userData.USER_ID })
-    );
-  }
-  async function handleDeleteButton() {
-    const confirm = window.confirm("Do you really want to delete this job ?");
-    if (!confirm) return;
-    await axios
-      .delete(`${jobsUrl}/delete-job-post/${jobDetail._id}`)
-      .then((res) => res.data)
-      .then((res) => {
-        if (res.status) {
-          toast.success(
-            "Job deleted successfully. Refresh Once if not updated"
-          );
-        } else {
-          toast.error("Cannot delete job ");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.message);
-      });
-  }
-  async function handleApplyButton() {
-    // step-1 check if the seeker is logged in
-    //        if not ask him to login first
-    if (!user.loggedIn) {
-      return toast.warn("You are not logged In");
-    }
-    // seeker is logged In .
-    // step-2
-    // put the job Id of this job post to the seeker's account.
-    // const date = new Date().toLocaleString();
-    const obj = {
-      userId: user.userData.USER_ID,
-      jobId: jobDetail._id,
-    };
-    dispatch(ApplyToJob(obj));
 
-    // put the  userId of the seeker's account to the job post.
-    // axios.post("http://localhost:1008/jobs/add-seeker");
-  }
   return (
     <div
       id="job-card-main"
@@ -112,7 +59,7 @@ export default function JobCard(props) {
 
         {jobDetail.SalaryToDisclose === "yes" && (
           <h1 className="text-green-700 font-mono text-[10px] bg-white px-2 rounded-md">
-            {jobDetail.Salary + "LPA"}
+            {jobDetail.Salary + " PA"}
           </h1>
         )}
       </div>
@@ -128,45 +75,12 @@ export default function JobCard(props) {
 
         {user.loggedIn && user.userData.USER_ID === jobDetail.CreatorInfo && (
           <>
-            <RiDeleteBin5Line
-              className="text-white cursor-pointer hover:text-red-500"
-              onClick={handleDeleteButton}
-            />
+            <RiDeleteBin5Line className="text-white cursor-pointer hover:text-red-500" />
             <FaEdit className="text-white cursor-pointer hover:text-green-300" />
           </>
         )}
-
-        {user.loggedIn && (
-          <>
-            {user.userData.USER_ID !== jobDetail.CreatorInfo && (
-              <>
-                {!user.userData.SavedJobs.includes(jobDetail._id) ? (
-                  <BsSave
-                    className="text-white cursor-pointer hover:text-green-400"
-                    onClick={handleSaveButton}
-                  />
-                ) : (
-                  <BsSaveFill
-                    onClick={handleUnsaveJob}
-                    title="Job is saved. Click to unsave"
-                    className="text-white hover:text-black cursor-pointer"
-                  />
-                )}
-              </>
-            )}
-          </>
-        )}
-
-        {!user.loggedIn ||
-        (user.loggedIn &&
-          user.userData.UserType === "seeker" &&
-          !user.userData.Applies.includes(jobDetail._id)) ? (
-          <h1 className="text-[10px]" onClick={handleApplyButton}>
-            Apply
-          </h1>
-        ) : (
-          <>{user.userData.Applies.includes(jobDetail._id) ? "Applied" : ""}</>
-        )}
+        <SaveJob job_id={jobDetail._id} />
+        <ApplyToJob job_id={jobDetail._id} />
       </div>
       <h1 className="text-[10px]">Job Id : {jobDetail._id}</h1>
     </div>

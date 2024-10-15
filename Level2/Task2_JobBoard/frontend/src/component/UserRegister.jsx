@@ -87,7 +87,6 @@ export default function UserRegister(props) {
     });
     //Another compulsary data which can't be taken with details
     formData.append("USER_ID", USER_ID);
-    formData.append("Posts", []);
     formData.append("ProfilePic", profilePic, `images-${USER_ID}.jpg`);
     if (UserType === "recruiter") {
       formData.append("CompanyName", CompanyName);

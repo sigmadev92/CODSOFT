@@ -54,13 +54,13 @@ export default function WhyUs() {
       <div id="officers" className="flex justify-center">
         <div id="ceo">
           <img src={ceo} alt="CEO" className="w-[200px] h-[200px]" />
-          <h1 className="text-[12px] font-bold">Alan Ruhansky </h1>
-          <h1>CEO, JobSoft</h1>
+          <h1 className="text-[12px] font-bold text-center">Alan Ruhansky </h1>
+          <h1 className="text-center">CEO, JobSoft</h1>
         </div>
         <div id="cfo">
           <img src={cfo} alt="CFO" className="w-[200px] h-[200px]" />
-          <h1 className="text-[12px] font-bold">Denis Scorpio </h1>
-          <h1>CFO, JobSoft</h1>
+          <h1 className="text-[12px] font-bold text-center">Denis Scorpio </h1>
+          <h1 className="text-center">CFO, JobSoft</h1>
         </div>
       </div>
     </div>

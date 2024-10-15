@@ -5,19 +5,16 @@ import { MdOutlineWork } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
 import { CgMail } from "react-icons/cg";
 import { baseUrl, usersUrl } from "../component/functionsJs/urls";
+import PostedJobs from "../component/profile/PostedJobs";
 export default function Profile() {
   const user_ID = window.location.pathname.slice(9);
 
   const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
-    function fetch() {
-      axios
-        .get(`${usersUrl}/data/`, {
-          headers: {
-            profile: user_ID,
-          },
-        })
+    async function fetch() {
+      await axios
+        .get(`${usersUrl}/data/${user_ID}`)
         .then((response) => {
           if (response.data.status) setUserDetails(response.data.data);
           else console.log(response.data);
@@ -44,14 +41,20 @@ export default function Profile() {
             <div className="text-white text-[12px]">
               {" "}
               <h1 className="text-[20px] font-bold">{userDetails.FullName}</h1>
-              <h1>
-                <MdOutlineWork className="inline mr-1" /> {userDetails.JobRole}
-              </h1>
-              <h1>
-                {" "}
-                <IoMdTime className="inline mr-1" /> Joined{" "}
-                {moment(userDetails.createdAt).fromNow()}
-              </h1>
+              {userDetails.UserType === "seeker" && (
+                <>
+                  <h1>
+                    <MdOutlineWork className="inline mr-1" />{" "}
+                    {userDetails.JobRole}
+                  </h1>
+
+                  <h1>
+                    {" "}
+                    <IoMdTime className="inline mr-1" /> Joined{" "}
+                    {moment(userDetails.createdAt).fromNow()}
+                  </h1>
+                </>
+              )}
               <h1 className="">
                 <CgMail className="inline mr-1" />
                 {userDetails.Email}
@@ -65,7 +68,21 @@ export default function Profile() {
             <h1 className="text-[20px] font-bold">About</h1>
             <p>{userDetails.About?.About}</p>
             <h1 className="text-[20px] font-bold">Posts</h1>
-            <h1 className="text-[20px] font-bold">Certifications</h1>
+            <h1 className="text-[20px] font-bold">
+              {userDetails.UserType === "seeker" ? "Certifications" : "Jobs"}
+            </h1>
+            {userDetails.UserType !== "seeker" && (
+              <PostedJobs user_id={user_ID} />
+            )}
+            {userDetails.UserType !== "org" && (
+              <>
+                <h1 className="text-[20px] font-bold">Experience</h1>
+                <h1 className="text-[20px] font-bold">Education</h1>
+              </>
+            )}
+            {userDetails.UserType === "seeker" && (
+              <h1 className="text-[20px] font-bold">Skills</h1>
+            )}
           </div>
         </>
       )}

@@ -5,6 +5,8 @@ import JobPost from "../component/JobPost";
 import axios from "axios";
 import JobCard from "../component/JobCard";
 import { jobsUrl } from "../component/functionsJs/urls.js";
+import TotalApplies from "../component/jobs/TotalApplies.jsx";
+import TotalSaves from "../component/jobs/TotalSaves.jsx";
 export default function Jobs() {
   const user = useSelector((state) => state.user);
   const [tab, setTab] = useState("1");
@@ -12,7 +14,7 @@ export default function Jobs() {
   const [jobs, setJobs] = useState([]);
   useEffect(() => {
     async function fetch() {
-      axios
+      await axios
         .get(`${jobsUrl}/get-all`)
         .then((res) => {
           if (res.data.status) {
@@ -64,9 +66,13 @@ export default function Jobs() {
             <h1 className="bg-white">Total Jobs : {jobs.length}</h1>
             {user.loggedIn && user.userData.UserType === "seeker" && (
               <h1>
-                Your applies : {user.loggedIn && user.userData.Applies.length}
+                {/* if user is logged in and is a seeker we have to show his  total applies*/}
+                Your applies : <TotalApplies />
               </h1>
             )}
+            <h1>
+              Your Saves : <TotalSaves />
+            </h1>
           </div>
 
           <div className="flex  flex-wrap justify-start md:w-[90%] m-auto">

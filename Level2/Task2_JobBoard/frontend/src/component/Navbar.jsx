@@ -4,14 +4,15 @@ import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAuth } from "../redux/slice/userSlice";
-
+import { IoMdMenu } from "react-icons/io";
+import { AiTwotoneCloseCircle } from "react-icons/ai";
 export default function Navbar() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const link = window.location.pathname;
   const [hideLinks, setHideLinks] = useState(true);
   const linksClass =
-    "text-white px-2 border-[2px] border-[blue] md:border-none cursor-pointer md:hover:bg-black hover:bg-red-300 rounded-md";
+    "text-white text-[12px] md:text-[15px] px-2 md:border-none cursor-pointer md:hover:bg-black hover:bg-red-300 rounded-md";
 
   const navigate = useNavigate();
   return (
@@ -30,7 +31,7 @@ export default function Navbar() {
       <div id="links" className="mr-[30px] mt-[10px]">
         <ul
           id="navbar-links-sm"
-          className={`absolute right-3 mt-[25px] bg-black ${
+          className={`absolute right-3 mt-[25px] bg-black rounded-md ${
             hideLinks && "hidden"
           }
           gap-x-2  md:flex md:visible md:flex-row md:relative md:bg-transparent md:mt-0`}
@@ -106,7 +107,7 @@ export default function Navbar() {
           className="hover:bg-white px-2 rounded-sm visible md:hidden"
           onClick={() => setHideLinks((prev) => !prev)}
         >
-          {hideLinks ? "[[O]]" : "[[X]]"}
+          {hideLinks ? <IoMdMenu /> : <AiTwotoneCloseCircle />}
         </button>
       </div>
     </div>

@@ -58,7 +58,7 @@ export default function UserLogin(props) {
         }
       })
       .catch((err) => {
-        alert("SOme technical error at our end");
+        toast.error("SOme technical error at our end");
         console.log(err);
       });
   }

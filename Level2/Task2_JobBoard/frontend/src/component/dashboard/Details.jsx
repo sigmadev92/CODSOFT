@@ -31,7 +31,7 @@ export default function Details(props) {
       <h1 className="text-[12px] font-bold">{user.userData.JobRole}</h1>
       <h1 className="text-[12px]">{user.userData.Email}</h1>
       <h1 className="text-[12px]">{user.userData.PhoneNumber}</h1>
-      {user.userData.userType === "seeker" && (
+      {user.userData.UserType === "seeker" && (
         <h1
           className="text-[12px] cursor-pointer hover:text-[aqua]"
           onClick={() => window.open(`${baseUrl}/${user.userData.Resume}`)}

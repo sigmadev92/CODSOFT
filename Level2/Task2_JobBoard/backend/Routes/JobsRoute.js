@@ -59,8 +59,8 @@ JobRouter.post("/get-jobs", async (req, res) => {
   }
 });
 
-JobRouter.post("/get-posted-jobs/:user_id", async (req, res) => {
-  console.log(req.params.user_id);
+JobRouter.get("/get-posted-jobs/:user_id", async (req, res) => {
+  console.log(`Reached at Job Postings `, req.params.user_id);
   try {
     const response = await Jobs.find({ CreatorInfo: req.params.user_id });
     console.log(response.length);
@@ -90,6 +90,31 @@ JobRouter.delete("/delete-job-post/:job_id", async (req, res) => {
     return res.send({
       status: false,
       message: "Cannot be deleted",
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
+JobRouter.get("/get-details/:jobId", async (req, res) => {
+  console.log("Time : ", new Date().getHours());
+  console.log("Task : To get Full details of a particular job");
+
+  try {
+    const response = await Jobs.findOne({ _id: req.params.jobId });
+    if (response) {
+      return res.send({
+        status: true,
+        data: response,
+      });
+    }
+    res.send({
+      status: false,
+      message: "INVALID_JOBID",
     });
   } catch (error) {
     console.log(error);

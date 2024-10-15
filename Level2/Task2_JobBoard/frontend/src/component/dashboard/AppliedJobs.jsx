@@ -8,14 +8,21 @@ import JobCard from "../JobCard";
 import { jobsUrl } from "../functionsJs/urls";
 export default function AppliedJobs(props) {
   const user = useSelector((state) => state.user);
-  const [jobs, setJobs] = useState([]);
   const [isLoading, setIsloading] = useState(true);
+  const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(false);
+  const jobAction = useSelector((state) => state.jobAction);
   useEffect(() => {
     const function1 = async () => {
+      const Appliedjobs = jobAction.records?.filter(
+        (job) =>
+          job.UserId === user.userData.USER_ID && job.ActionType === "apply"
+      );
+      const AppliedJobIds = [];
+      Appliedjobs.forEach((ele) => AppliedJobIds.push(ele.JobId));
       await axios
         .post(`${jobsUrl}/get-jobs`, {
-          jobIds: user.userData.Applies,
+          jobIds: AppliedJobIds,
           task: "Arrived here for getting applied jobs by the Seeker",
         })
         .then((res) => res.data)

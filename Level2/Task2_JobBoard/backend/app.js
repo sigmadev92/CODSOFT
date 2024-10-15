@@ -5,13 +5,14 @@ import bodyParser from "body-parser";
 import dbConfig from "./Config/dbConfig.js";
 import UserRouter from "./Routes/UserRouter.js";
 import JobRouter from "./Routes/JobsRoute.js";
+import JobActionRouter from "./Routes/JobActionsRouter.js";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 1008;
 app.use(
   cors({
-    origin: "https://classy-semifreddo-130426.netlify.app",
+    origin: "http://localhost:3000",
   })
 );
 app.use(express.json());
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/users", UserRouter);
 app.use("/jobs", JobRouter);
+app.use("/job-actions", JobActionRouter);
 dbConfig.dbConnection();
 app.listen(PORT, () =>
   console.log("SERVER RUNNING AT " + "http://localhost:" + PORT)

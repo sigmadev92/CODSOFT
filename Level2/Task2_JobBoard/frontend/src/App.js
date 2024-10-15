@@ -16,11 +16,13 @@ import Profile from "./pages/Profile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import JobDetail from "./pages/JobDetail";
+import { fetchJobActionRecords } from "./redux/slice/jobActionSlice";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUser());
+    dispatch(fetchJobActionRecords());
   }, []);
   return (
     <>

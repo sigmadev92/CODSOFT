@@ -15,7 +15,7 @@ export default function PostedJobs(props) {
   useEffect(() => {
     const function1 = async () => {
       await axios
-        .post(`${jobsUrl}/get-posted-jobs/${user.userData.USER_ID}`)
+        .get(`${jobsUrl}/get-posted-jobs/${user.userData.USER_ID}`)
         .then((res) => res.data)
         .then((res) => {
           if (res.status) {
