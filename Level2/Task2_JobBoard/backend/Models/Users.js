@@ -26,6 +26,10 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    IsMailVerified: {
+      type: Boolean,
+      required: true,
+    },
     PhoneNumber: {
       type: Number,
       required: true,

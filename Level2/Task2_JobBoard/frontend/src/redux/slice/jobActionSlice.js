@@ -74,6 +74,7 @@ const jobActionSlice = createSlice({
           state.records.findIndex((ele) => ele._id === action.payload._id),
           1
         );
+        toast.success("Job unsaved successfully");
       }
     });
     builders.addCase(removeSavedJob.rejected, (state, action) => {

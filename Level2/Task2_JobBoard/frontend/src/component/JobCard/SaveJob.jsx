@@ -29,23 +29,26 @@ export default function SaveJob(props) {
   }
   return (
     <>
-      {user.loggedIn &&
-      jobAction.records.find(
-        (ele) =>
-          ele.JobId === props.job_id &&
-          ele.UserId === user.userData?.USER_ID &&
-          ele.ActionType === "save"
-      ) === undefined ? (
-        <BsSave
-          className="text-white cursor-pointer hover:text-green-400"
-          onClick={handleSaveButton}
-        />
-      ) : (
-        <BsSaveFill
-          title="Job is saved. Click to unsave"
-          className="text-white hover:text-black cursor-pointer"
-          onClick={handleUnsaveButton}
-        />
+      {user.loggedIn && (
+        <>
+          {jobAction.records.find(
+            (ele) =>
+              ele.JobId === props.job_id &&
+              ele.UserId === user.userData?.USER_ID &&
+              ele.ActionType === "save"
+          ) === undefined ? (
+            <BsSave
+              className="text-white cursor-pointer hover:text-green-400"
+              onClick={handleSaveButton}
+            />
+          ) : (
+            <BsSaveFill
+              title="Job is saved. Click to unsave"
+              className="text-white hover:text-black cursor-pointer"
+              onClick={handleUnsaveButton}
+            />
+          )}
+        </>
       )}
     </>
   );

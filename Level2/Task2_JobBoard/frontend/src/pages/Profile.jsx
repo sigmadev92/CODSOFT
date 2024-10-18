@@ -6,6 +6,8 @@ import { IoMdTime } from "react-icons/io";
 import { CgMail } from "react-icons/cg";
 import { baseUrl, usersUrl } from "../component/functionsJs/urls";
 import PostedJobs from "../component/profile/PostedJobs";
+import { VscAccount } from "react-icons/vsc";
+import "../component/profile/profile.css";
 export default function Profile() {
   const user_ID = window.location.pathname.slice(9);
 
@@ -38,9 +40,20 @@ export default function Profile() {
               alt="profile"
               className="w-[30%] h-[30%] md:w-[20%] md:h-[20%] rounded-full border-white border-[2px] "
             />
+
             <div className="text-white text-[12px]">
               {" "}
               <h1 className="text-[20px] font-bold">{userDetails.FullName}</h1>
+              {userDetails.UserType === "recruiter" && (
+                <>
+                  <h1>Recruiter</h1>
+                  <h1>
+                    <VscAccount className="inline mr-1" />
+                    {userDetails.Position}{" "}
+                  </h1>
+                  <h1 className="font-semibold">@ {userDetails.CompanyName}</h1>
+                </>
+              )}
               {userDetails.UserType === "seeker" && (
                 <>
                   <h1>
@@ -64,9 +77,9 @@ export default function Profile() {
               </h1>
             </div>
           </div>
-          <div className="w-[80%] mx-auto p-3">
+          <div className="w-[80%] mx-auto p-3 mb-[50px]">
             <h1 className="text-[20px] font-bold">About</h1>
-            <p>{userDetails.About?.About}</p>
+            <p>{userDetails.About}</p>
             <h1 className="text-[20px] font-bold">Posts</h1>
             <h1 className="text-[20px] font-bold">
               {userDetails.UserType === "seeker" ? "Certifications" : "Jobs"}

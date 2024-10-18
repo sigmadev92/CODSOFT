@@ -16,6 +16,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 import { FaExternalLinkAlt } from "react-icons/fa";
+import Applies from "../component/jobDetails/Applies";
 export default function JobDetail() {
   const user = useSelector((state) => state.user);
 
@@ -61,7 +62,7 @@ export default function JobDetail() {
               className="w-[15%] md:w-[60px] rounded-[20px]"
             />
             <h1>{jobDetail.Title}</h1>
-            <div className="flex justify-between pr-3">
+            <div className="flex justify-between pr-3 flex-wrap gap-x-5">
               <h1>
                 {jobDetail.CreatorType === "recruiter" ? "Posted By" : ""}{" "}
                 <span
@@ -77,7 +78,7 @@ export default function JobDetail() {
               <h1>Posted {moment(jobDetail.createdAt).fromNow()}</h1>
             </div>
             <h1 className="text-[10px]">
-              Applies : {jobDetail.WhoHasApplied?.length}
+              Applies : <Applies job_id={jobId} />
             </h1>
             {!user.loggedIn ||
             (user.loggedIn &&
@@ -125,7 +126,7 @@ export default function JobDetail() {
                 </h1>
                 <h1>
                   <BsPeopleFill className="inline mr-2" />
-                  vanancies
+                  vacancies
                 </h1>
                 <h1>
                   {" "}
@@ -177,6 +178,7 @@ export default function JobDetail() {
                 {jobDetail.CreatedBy}
                 <FaExternalLinkAlt className="inline ml-2 mt-[-5px]" />
               </h1>
+              <h1>{}</h1>
             </div>
           )}
         </>

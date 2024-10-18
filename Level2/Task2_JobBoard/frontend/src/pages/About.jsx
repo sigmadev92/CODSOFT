@@ -9,7 +9,9 @@ export default function About() {
       <div className="w-[90%] md:w-[60%] max-w-[400px] mx-auto mt-3">
         <p className="font-serif">
           This website is a fiction. No Real Jobs or people. Images are
-          generated with the help of META AI
+          generated with the help of META AI. You can register as any one but
+          make sure you provide real email address (real phone number not
+          required) to get notification.
         </p>
         <p className="font-semibold">
           This website is created by{" "}
@@ -19,7 +21,7 @@ export default function About() {
           >
             Devansh Raghuwanshi
           </span>{" "}
-          (A77) who was an intern in CodSoft during 20 Sept 2024 to 20 Oct 2024.
+          (A77) who was an intern in CodSoft during 20 Sept 2024 to 19 Oct 2024.
         </p>
         <p>
           About{" "}

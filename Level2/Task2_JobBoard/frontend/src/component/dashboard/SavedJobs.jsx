@@ -12,6 +12,7 @@ export default function SavedJobs(props) {
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(false);
   const jobAction = useSelector((state) => state.jobAction);
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     const function1 = async () => {
       const Savedjobs = jobAction.records?.filter(
@@ -39,19 +40,25 @@ export default function SavedJobs(props) {
         .catch((err) => console.log(err));
     };
     function1();
-  }, []);
+  }, [refresh]);
 
   return (
     <div
       id="applied-jobs"
-      className="w-full min-h-[300px] bg-slate-300 rounded-t-lg md:mb-[100px]"
+      className="w-full min-h-[300px] text-white bg-slate-300 rounded-t-lg md:mb-[100px]"
     >
       <div className="flex justify-end gap-x-3 bg-black rounded-t-lg px-4">
-        <h1 className="text-center font-semibold bg-black text-white text-[12px] rounded-t-lg">
+        <button
+          className="text-[12px]"
+          onClick={() => setRefresh((prev) => !prev)}
+        >
+          Refresh
+        </button>
+        <h1 className="text-center font-semibold bg-black text-[12px] rounded-t-lg">
           Saved jobs
         </h1>
         <RiFolderCloseFill
-          className="hover:text-red-700 cursor-pointer text-white"
+          className="hover:text-red-700 cursor-pointer"
           onClick={() => props.fn(false)}
         />
       </div>

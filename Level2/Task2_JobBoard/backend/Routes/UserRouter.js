@@ -8,7 +8,14 @@ import nodemailer from "nodemailer";
 
 dotenv.config();
 const UserRouter = express.Router();
-
+let config = {
+  service: "gmail",
+  auth: {
+    user: process.env.MY_EMAIL,
+    pass: process.env.APP_PASSWORD,
+  },
+};
+let transporter = nodemailer.createTransport(config);
 UserRouter.get("/", (req, res) => {
   res.send("<p>reached Seeker's Route</p>");
 });
@@ -24,6 +31,7 @@ UserRouter.post(
     { name: "Resume", maxCount: 1 },
   ]),
   async (req, res) => {
+    console.log("Arrived at POST backend/users/register");
     if (req.body.Email === process.env.MY_EMAIL) {
       return res.send({
         status: false,
@@ -58,16 +66,45 @@ UserRouter.post(
         req.body.Resume = req.files.Resume[0].originalname;
       }
       //step-3 Protecting passwords using hashing
-
-      const hashedPassword = await bcrypt.hash(req.body.Password, salt);
+      const enteredPassword = req.body.Password;
+      const hashedPassword = await bcrypt.hash(enteredPassword, salt);
       if (hashedPassword) {
         req.body.Password = hashedPassword;
+        req.body.IsMailVerified = false;
         const newUser = await Users(req.body);
         await newUser.save();
-
-        return res.send({
-          status: true,
+        //send a verification mail consisting of verification otp to registered mailId.
+        //setp-1 generate an OTP
+        const OTP = gererator.generate({
+          length: 6,
+          numbers: true,
+          symbols: "#$@_",
+          strict: true,
         });
+        let message = {
+          from: process.env.MY_EMAIL,
+          to: req.body.Email,
+          subject: "Verify Your Mail Id",
+          html: `<P>Dear ${req.body.FullName} <br/>You have successfully registered with our website JobSoft as a ${req.body.UserType}.As a last step, you are requested to fill this verification code ${OTP} to the verification box provided so that we can verify your mail ID.Your credentials : ${req.body.Email} and password ${enteredPassword} <br/>Team JobSoft</p>`,
+        };
+
+        transporter
+          .sendMail(message)
+          .then(() => {
+            console.log("OTP sent successfully");
+            return res.send({
+              status: true,
+              code: OTP,
+              USER_ID: req.body.USER_ID,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.send({
+              status: false,
+              message: "ERROR_SERVER_TO_MAIL_ERROR",
+            });
+          });
       } else {
         return res.send({
           status: false,
@@ -84,14 +121,33 @@ UserRouter.post(
   }
 );
 
-UserRouter.post("/login", (req, res) => {
-  console.log(req.body);
+//The control will come here only if the code entered by user is equal to the
+// verification code.
+UserRouter.put("/verify-mail/:user_id", async (req, res) => {
+  console.log("Arrived here at PUT backend/users/verify-email");
+
+  await Users.updateOne(
+    { USER_ID: req.params.user_id },
+    { IsMailVerified: true }
+  )
+    .then(() => res.send({ status: true }))
+    .catch((err) => console.log(err));
+});
+
+UserRouter.post("/login", async (req, res) => {
+  console.log("Arrived at POST backend/users/login");
 
   Users.findOne({ Email: req.body.Email })
     .then(async (user) => {
       if (user) {
         const result = await bcrypt.compare(req.body.Password, user.Password);
         if (result) {
+          if (user.IsMailVerified === undefined) {
+            await Users.updateOne(
+              { Email: req.body.Email },
+              { IsMailVerified: false }
+            );
+          }
           return res.send({
             status: true,
             jwt: user._id,
@@ -184,9 +240,9 @@ UserRouter.get("/data/:user_id", async (req, res) => {
   }
 });
 
-UserRouter.get("/forget-password", async (req, res) => {
-  console.log("reacherd here", req.headers.email);
-  const UserEmail = await Users.findOne({ Email: req.headers.email });
+UserRouter.get("/forget-password/:email", async (req, res) => {
+  console.log("Arrived at GET backend/users/forget-password", req.params.email);
+  const UserEmail = await Users.findOne({ Email: req.params.email });
   if (!UserEmail) {
     return res.send({
       status: false,
@@ -219,7 +275,7 @@ UserRouter.get("/forget-password", async (req, res) => {
     console.log(err);
     return res.send({
       status: false,
-      message: error.message,
+      message: err.message,
     });
   }
 
@@ -265,24 +321,10 @@ UserRouter.get("/forget-password", async (req, res) => {
   }
     */
   //Approach with a real account
-  let config = {
-    service: "gmail",
-    auth: {
-      user: process.env.MY_EMAIL,
-      pass: process.env.APP_PASSWORD,
-    },
-  };
-  let transporter = nodemailer.createTransport(config);
-  // let MailGenerator = new Mailgen({
-  //   theme:"default",
-  //   product:{
-  //     name:"Mailgen",
-  //     link:"https://mailgen.js",
-  //   }
-  // })
+
   let message = {
     from: process.env.MY_EMAIL,
-    to: req.headers.email,
+    to: req.params.email,
     subject: "Alert! Your Password is Changed",
     html: `<P>Dear ${UserEmail.FullName} <br/>Your new password is ${password}. Do not share it with anyone. You can change it later in dashboard .<br/>Team JobSoft</p>`,
   };
@@ -385,6 +427,25 @@ UserRouter.get("/usertype/:user_type", async (req, res) => {
     return res.send({
       status: true,
       data: response,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+UserRouter.put("/edit-user/:user_id", async (req, res) => {
+  console.log("Arrived at PUT backend/users/edit-user");
+  try {
+    const response = await Users.updateOne(
+      { USER_ID: req.params.user_id },
+      req.body
+    );
+    console.log(response);
+    return res.send({
+      status: true,
     });
   } catch (error) {
     console.log(error);

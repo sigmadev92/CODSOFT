@@ -10,6 +10,7 @@ import { TfiWrite } from "react-icons/tfi";
 import SavedJobs from "../component/dashboard/SavedJobs";
 import PostedJobs from "../component/dashboard/PostedJobs";
 import Loading from "../component/Loading";
+import { toast } from "react-toastify";
 export default function Dashboard() {
   const user = useSelector((state) => state.user);
   const [openProfile, setopenProfile] = useState(false);
@@ -36,7 +37,9 @@ export default function Dashboard() {
         </button>
         <button
           className="bg-green-400 font-serif  hover:bg-green-600 p-1 shadow-lg m-2 rounded-md border-black border-2 text-[10px]"
-          onClick={() => {}}
+          onClick={() => {
+            toast.warn("Currently feature not available");
+          }}
         >
           Write a Post <TfiWrite className="inline text-[15px] text-black" />
         </button>

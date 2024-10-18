@@ -59,6 +59,29 @@ JobRouter.post("/get-jobs", async (req, res) => {
   }
 });
 
+JobRouter.get("/search-jobs/:jobTitle", async (req, res) => {
+  console.log("Arrived on GET/backend/jobs/search-jobs");
+  const srch = req.params.jobTitle;
+  try {
+    const searchedJObs = await Jobs.find({
+      $or: [
+        { Cities: { $regex: srch, $options: "i" } },
+        { Title: { $regex: srch, $options: "i" } },
+      ],
+    });
+    res.send({
+      status: true,
+      data: searchedJObs,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
 JobRouter.get("/get-posted-jobs/:user_id", async (req, res) => {
   console.log(`Reached at Job Postings `, req.params.user_id);
   try {
