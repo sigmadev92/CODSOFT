@@ -15,6 +15,10 @@ const JobSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    Vacancies: {
+      type: Number,
+      required: true,
+    },
     Education: {
       type: String,
       // required: true,
@@ -31,6 +35,7 @@ const JobSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
     CreatorInfo: {
       type: String,
       required: true,
@@ -100,6 +105,10 @@ const JobSchema = mongoose.Schema(
 
     About: {
       type: String,
+      required: true,
+    },
+    isFeatJob: {
+      type: Boolean,
     },
   },
 

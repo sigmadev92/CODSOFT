@@ -75,6 +75,13 @@ const UserSchema = mongoose.Schema(
         return this.UserType === "recruiter";
       },
     },
+    Education: { type: String },
+    Experience: {
+      type: Number,
+      required: function () {
+        return this.UserType === "recruiter";
+      },
+    },
     About: {
       type: String,
     },

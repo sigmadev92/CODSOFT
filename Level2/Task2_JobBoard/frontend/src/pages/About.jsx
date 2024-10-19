@@ -77,6 +77,15 @@ export default function About() {
           request from the job provider. Featured jobs are in every field but a
           job seekers will see only those jobs which are related to their field
           and interests.
+          <h1 className="font-semibold">Criteria for featured jobs :</h1>
+          <ol>
+            <li>Proper description about job.</li>
+            <li>More than 50 vacancies</li>
+            <li>
+              Posted by a FAANG like Organisation or a 10+ years experienced
+              recruiter
+            </li>
+          </ol>
         </p>
       </div>
     </div>

@@ -8,7 +8,17 @@ JobRouter.get("/", (req, res) => {
 });
 
 JobRouter.post("/add", async (req, res) => {
-  console.log(req.body);
+  console.log("Arrived at POST backend/jobs/add");
+  if (
+    req.body.About.length >= 1000 &&
+    req.body.Vacancies >= 50 &&
+    (req.body.CreatorType === "org" || req.body.PosterExp >= 10)
+  ) {
+    //feat job
+
+    console.log("A featured job");
+    req.body.isFeatJob = true;
+  }
   try {
     const newJob = await Jobs(req.body);
     await newJob.save();
@@ -55,6 +65,30 @@ JobRouter.post("/get-jobs", async (req, res) => {
     console.log(error);
     res.send({
       status: false,
+    });
+  }
+});
+
+JobRouter.get("/feat-jobs/:job_role", async (req, res) => {
+  console.log("reached at GET backend/jobs/feat-jobs");
+  const prefJob = req.params.job_role;
+  try {
+    const featJobs = await Jobs.find({
+      $and: [
+        { isFeatJob: true },
+        { Title: { $regex: prefJob, $options: "i" } },
+      ],
+    });
+
+    res.send({
+      status: true,
+      data: featJobs,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
     });
   }
 });

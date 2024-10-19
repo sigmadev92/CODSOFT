@@ -8,6 +8,7 @@ import { jobsUrl } from "../component/functionsJs/urls.js";
 import TotalApplies from "../component/jobs/TotalApplies.jsx";
 import TotalSaves from "../component/jobs/TotalSaves.jsx";
 import JobSearch from "../component/jobs/JobSearch.jsx";
+import PostedJobs from "../component/jobs/PostedJobs.jsx";
 export default function Jobs() {
   const user = useSelector((state) => state.user);
   const [tab, setTab] = useState("1");
@@ -64,19 +65,31 @@ export default function Jobs() {
       </div>
 
       {tab === "1" && (
-        <div className="">
+        <div className="mb-12">
           <JobSearch fn={{ setClickedSearch, setSearchedJobs }} />
           <div className="flex gap-x-4 justify-center bg-slate-800 text-white mt-2">
             <h1 className="">Total Jobs : {jobs.length}</h1>
-            {user.loggedIn && user.userData.UserType === "seeker" && (
-              <h1>
-                {/* if user is logged in and is a seeker we have to show his  total applies*/}
-                Your applies : <TotalApplies />
-              </h1>
+            {user.loggedIn && (
+              <>
+                {user.userData.UserType === "seeker" ? (
+                  <h1>
+                    {/* if user is logged in and is a seeker we have to show his  total applies*/}
+                    Your applies : <TotalApplies />
+                  </h1>
+                ) : (
+                  <h1>
+                    Your Posted Jobs :{" "}
+                    <PostedJobs poster_id={user.userData.USER_ID} />
+                  </h1>
+                )}
+              </>
             )}
+
             <h1>
               Your Saves : <TotalSaves />
             </h1>
+
+            <h1></h1>
           </div>
           {clickedSearch ? (
             <div className="w-[90%] mx-auto">

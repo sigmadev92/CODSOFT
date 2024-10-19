@@ -12,6 +12,7 @@ export default function JobPost(props) {
     Sector: "Agriculture",
     Industry: "Crop Production",
     Department: "Crop Management",
+    Vacancies: "",
     JobType: "full-time",
     Paid: "no",
     InternSalary: "",
@@ -27,12 +28,15 @@ export default function JobPost(props) {
     Salary: "",
     Preference: "none",
     About: "",
+    PosterExp:
+      user.userData.UserType === "recruiter" && user.userData.Experience,
   });
 
   const {
     Sector,
     Industry,
     Department,
+    Vacancies,
     JobType,
     Paid,
     InternSalary,
@@ -123,7 +127,7 @@ export default function JobPost(props) {
         </div>
         <div className="flex ml-3 gap-x-2 mt-2 text-[12px]">
           Select Industry
-          <select name="Industry" onChange={handleChange}>
+          <select name="Industry" value={Industry} onChange={handleChange}>
             {sectors
               .find((sector) => {
                 return sector.Name === Sector;
@@ -145,7 +149,7 @@ export default function JobPost(props) {
         </button> */}
         <div className="flex ml-3 gap-x-1 mt-2 text-[12px]">
           Select Department
-          <select name="Department" onChange={handleChange}>
+          <select name="Department" value={Department} onChange={handleChange}>
             {sectors
               .find((sector) => {
                 return sector.Name === Sector;
@@ -159,7 +163,15 @@ export default function JobPost(props) {
               })}{" "}
           </select>
         </div>
-
+        <input
+          type="Number"
+          name="Vacancies"
+          placeholder="vacancies..."
+          className="w-[90%] mx-auto block px-4 border-black border-[2px]"
+          value={Vacancies}
+          onChange={handleChange}
+          required
+        />
         {user.userData.UserType === "recruiter" && (
           <input
             type="text"
@@ -403,11 +415,13 @@ export default function JobPost(props) {
           name="About"
           placeholder="Description of Job"
           rows={4}
+          maxLength={1500}
           className="w-[90%] mx-auto block px-4 border-black border-[2px] resize-none"
           onChange={handleChange}
           value={About}
           required
         ></textarea>
+
         <div className="flex justify-center p-3">
           <button
             type="submit"

@@ -11,12 +11,41 @@ import { useSelector } from "react-redux";
 import { baseUrl, jobsUrl } from "./functionsJs/urls";
 import ApplyToJob from "./JobCard/ApplyToJob";
 import SaveJob from "./JobCard/SaveJob";
+import axios from "axios";
+import { toast } from "react-toastify";
 // import axios from "axios";
 
 export default function JobCard(props) {
   const user = useSelector((state) => state.user);
   const jobDetail = props.data;
   const navigate = useNavigate();
+
+  async function handleDeleteButton() {
+    const confirm = window.confirm(
+      `Do you want to delete this job? Job_ID : ${jobDetail._id}`
+    );
+
+    if (!confirm) {
+      return;
+    }
+    await axios
+      .delete(`${jobsUrl}/delete-job-post/${jobDetail._id}`)
+      .then((res) => res.data)
+      .then((res) => {
+        if (res.status) {
+          toast.success("job Deleted Successfully");
+        } else {
+          toast.error(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message);
+      });
+  }
+  async function handleEditButton() {
+    toast.error("This functionality is in progress");
+  }
 
   return (
     <div
@@ -75,8 +104,14 @@ export default function JobCard(props) {
 
         {user.loggedIn && user.userData.USER_ID === jobDetail.CreatorInfo && (
           <>
-            <RiDeleteBin5Line className="text-white cursor-pointer hover:text-red-500" />
-            <FaEdit className="text-white cursor-pointer hover:text-green-300" />
+            <RiDeleteBin5Line
+              className="text-white cursor-pointer hover:text-red-500"
+              onClick={handleDeleteButton}
+            />
+            <FaEdit
+              className="text-white cursor-pointer hover:text-green-300"
+              onClick={handleEditButton}
+            />
           </>
         )}
         <SaveJob job_id={jobDetail._id} />

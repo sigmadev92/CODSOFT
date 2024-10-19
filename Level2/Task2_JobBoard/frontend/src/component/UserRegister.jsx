@@ -31,9 +31,18 @@ export default function UserRegister(props) {
     PhoneNumber: "",
     Password: "",
     BirthDate: "",
+    Experience: "",
   });
-  var { UserType, FullName, Gender, Email, PhoneNumber, Password, BirthDate } =
-    details;
+  var {
+    UserType,
+    FullName,
+    Gender,
+    Email,
+    PhoneNumber,
+    Password,
+    BirthDate,
+    Experience,
+  } = details;
 
   //USER_ID and Posts are inserted at run time
   //ProfilePic is changed by different hook
@@ -108,8 +117,6 @@ export default function UserRegister(props) {
       formData.append("CompanyName", CompanyName);
       formData.append("Position", Position);
     }
-    if (UserType === "recruiter" || UserType === "org")
-      formData.append("JobPostings", []);
 
     if (UserType === "seeker") {
       formData.append("Resume", resume, `resumes-${USER_ID}.pdf`);
@@ -365,6 +372,14 @@ export default function UserRegister(props) {
                 value={Position}
                 placeholder="Your Position in Current Company"
                 onChange={(ev) => setPosition(ev.target.value)}
+              />
+              <input
+                className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
+                type="number"
+                name="Experience"
+                value={Experience}
+                placeholder="Your Experience..."
+                onChange={HandleChange}
               />
             </>
           )}
