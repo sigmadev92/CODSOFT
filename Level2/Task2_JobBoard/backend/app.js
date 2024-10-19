@@ -12,7 +12,9 @@ const app = express();
 const PORT = process.env.PORT || 1008;
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://job-portal-codsoft-01.vercel.app",
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 app.use(express.json());
