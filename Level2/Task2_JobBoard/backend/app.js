@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 1008;
 app.use(
   cors({
-    origin: "https://jobsoft-front-bexn3rrm3-sigmadev92s-projects.vercel.app",
+    origin: "https://jobsoft-front-end.vercel.app/",
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
