@@ -7,12 +7,12 @@ import { useNavigate } from "react-router-dom";
 import ImageDemo2 from "./ImageDemo2";
 import { toast } from "react-toastify";
 import { usersUrl } from "./functionsJs/urls";
-
+import { GoShieldLock } from "react-icons/go";
+import { RiLockUnlockLine } from "react-icons/ri";
 export default function UserRegister(props) {
   const [imageDive, setImageDiv] = useState(false);
   const navigate = useNavigate();
   const [passwordHidden, setpaswordHIdden] = useState(true);
-  const [autoGenEmailPass, setAutoGenEmailPass] = useState(false);
   const [verifyMail, setMailBox] = useState(false);
   const [otp, setOtp] = useState("");
   const [resUSER_ID, setUSER_ID] = useState("");
@@ -26,7 +26,7 @@ export default function UserRegister(props) {
   const [details, setDetails] = useState({
     UserType: props.UserType,
     FullName: "",
-    Gender: "0",
+    Gender: "skip",
     Email: "",
     PhoneNumber: "",
     Password: "",
@@ -123,32 +123,6 @@ export default function UserRegister(props) {
       formData.append("JobRole", JobRole);
     }
 
-    formData.append("AUTO_GENERATED", autoGenEmailPass);
-    if (autoGenEmailPass && details.Email === "") {
-      console.log("arrived here at main prob");
-      const names = Array.from(FullName.split(" "));
-      const n = names.length;
-      console.log(names);
-      const fname = names[0].toLowerCase();
-      const lname = names[n - 1].toLowerCase();
-      const tempEmail =
-        fname +
-        lname +
-        fname.charCodeAt(0) +
-        lname.charCodeAt(0) +
-        "@gmail.com";
-
-      const TempPassword = tempEmail.split("@")[0] + "123";
-      setDetails((prev) => ({
-        ...prev,
-        Email: tempEmail,
-        Password: TempPassword,
-      }));
-      formData.set("Email", tempEmail);
-      formData.set("Password", TempPassword);
-      console.log(details);
-    }
-
     axios
       .post(`${usersUrl}/register`, formData)
       .then((response) => {
@@ -220,45 +194,36 @@ export default function UserRegister(props) {
               />
             </label>
           )}
-
-          <label className="ml-3">
+          <h1 className="ml-4">Set Email and Password : </h1>
+          <input
+            className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
+            type="email"
+            name="Email"
+            value={Email}
+            placeholder="Email"
+            onChange={HandleChange}
+          />
+          <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px] relative">
             <input
-              type="checkbox"
-              onClick={() => setAutoGenEmailPass((prev) => !prev)}
+              className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
+              type={passwordHidden ? "password" : "text"}
+              name="Password"
+              value={Password}
+              placeholder="Password"
+              onChange={HandleChange}
             />
-            <span className="text-center">
-              Auto Generate Email and password
-            </span>
-          </label>
-          {!autoGenEmailPass && (
-            <>
-              <input
-                className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-                type="email"
-                name="Email"
-                value={Email}
-                placeholder="Email"
-                onChange={HandleChange}
+            {passwordHidden ? (
+              <GoShieldLock
+                className="absolute top-[11px] right-1 text-green-500 text-[25px] hover:bg-black cursor-pointer"
+                onClick={() => setpaswordHIdden(false)}
               />
-              <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px]">
-                <input
-                  className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
-                  type={passwordHidden ? "password" : "text"}
-                  name="Password"
-                  value={Password}
-                  placeholder="Password"
-                  onChange={HandleChange}
-                />
-                <button
-                  type="button"
-                  className=" border-2 bg-red-400 border-black h-fit mt-[10px] px-2 hover:bg-[aqua]"
-                  onClick={() => setpaswordHIdden((prev) => !prev)}
-                >
-                  TE
-                </button>
-              </div>
-            </>
-          )}
+            ) : (
+              <RiLockUnlockLine
+                className="absolute top-[11px]  right-1 text-red-500 text-[25px] hover:bg-black cursor-pointer"
+                onClick={() => setpaswordHIdden(true)}
+              />
+            )}
+          </div>
 
           {UserType !== "org" && (
             <>
@@ -270,7 +235,7 @@ export default function UserRegister(props) {
                 why?
               </h1>
 
-              <div className="flex justify-around">
+              <div className="flex justify-around text-[12px]">
                 <label>
                   <input
                     type="radio"
@@ -293,18 +258,18 @@ export default function UserRegister(props) {
                   <input
                     type="radio"
                     name="Gender"
-                    value="Futanari"
+                    value="Other"
                     onChange={HandleChange}
                   />
-                  Futanari
+                  Other
                 </label>
                 <label>
                   <input
                     type="radio"
                     name="Gender"
-                    value="not-say"
+                    value="skip"
                     onChange={HandleChange}
-                    checked={Gender === "0"}
+                    checked={Gender === "skip"}
                   />
                   Skip
                 </label>
