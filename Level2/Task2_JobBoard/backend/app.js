@@ -12,7 +12,11 @@ const app = express();
 const PORT = process.env.PORT || 1008;
 app.use(
   cors({
+<<<<<<< HEAD
     origin: ["https://jobsoft-front-end.vercel.app/", "http://localhost:3000"],
+=======
+    origin: "https://jobsoft-front-end.vercel.app",
+>>>>>>> 88aafad70921f5e99ea57bf6e88cd7ea4bc7bc72
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
