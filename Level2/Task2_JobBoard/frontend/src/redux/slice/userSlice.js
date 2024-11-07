@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { usersUrl } from "../../component/functionsJs/urls";
+import { usersUrl } from "../../functionsJs/urls";
 
 export const fetchUser = createAsyncThunk("fetchUser", async () => {
   if (localStorage.getItem("jwt") === null)

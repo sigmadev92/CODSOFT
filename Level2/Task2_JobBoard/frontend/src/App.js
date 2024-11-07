@@ -1,35 +1,46 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./component/Navbar";
-import Footer from "./component/Footer";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import Jobs from "./pages/Jobs";
-import About from "./pages/About";
+import Navbar from "./component/Navbar/Navbar";
+import Footer from "./component/Footer/Footer";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import Jobs from "./pages/Jobs/Jobs";
+import About from "./pages/About/About";
 import "react-image-crop/dist/ReactCrop.css";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchUser } from "./redux/slice/userSlice";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Profile from "./pages/Profile/Profile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import JobDetail from "./pages/JobDetail";
+import JobDetail from "./pages/JobDetail/JobDetail";
 import { fetchJobActionRecords } from "./redux/slice/jobActionSlice";
-import ChangePic from "./component/details/ChangePic";
-import ChangeResume from "./component/details/ChangeResume";
+import ChangePic from "./pages/Dashboard/jsx/ChangePic";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUser());
     dispatch(fetchJobActionRecords());
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <BrowserRouter>
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={false}
+          theme="colored"
+        />
         <Navbar />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -41,7 +52,6 @@ function App() {
           <Route path="/profile/:user_id" element={<Profile />} />
           <Route path="/jobs/:jobid" element={<JobDetail />} />
           <Route path="/change-profile-pic" element={<ChangePic />} />
-          <Route path="/change-resume" element={<ChangeResume />} />
         </Routes>
         <Footer />
       </BrowserRouter>

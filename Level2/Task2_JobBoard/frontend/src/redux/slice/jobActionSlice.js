@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { jobActionsUrl } from "../../component/functionsJs/urls";
+import { jobActionsUrl } from "../../functionsJs/urls";
 import { toast } from "react-toastify";
 export const fetchJobActionRecords = createAsyncThunk(
   "fetchJobActions",
   async () => {
     const response = await axios.get(`${jobActionsUrl}/get-all-records`);
-    console.log(response.data);
+
     return response.data;
   }
 );

@@ -6,17 +6,15 @@ import dbConfig from "./Config/dbConfig.js";
 import UserRouter from "./Routes/UserRouter.js";
 import JobRouter from "./Routes/JobsRoute.js";
 import JobActionRouter from "./Routes/JobActionsRouter.js";
-
+import logger from "./Config/logging.js";
+import morgan from "morgan";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 1008;
 app.use(
   cors({
-<<<<<<< HEAD
-    origin: ["https://jobsoft-front-end.vercel.app/", "http://localhost:3000"],
-=======
-    origin: "https://jobsoft-front-end.vercel.app",
->>>>>>> 88aafad70921f5e99ea57bf6e88cd7ea4bc7bc72
+    origin: "http://localhost:3000",
+
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
@@ -28,6 +26,25 @@ app.use("/users", UserRouter);
 app.use("/jobs", JobRouter);
 app.use("/job-actions", JobActionRouter);
 dbConfig.dbConnection();
+
+const morganFormat = ":method :url :status :response-time ms";
+
+app.use(
+  morgan(morganFormat, {
+    stream: {
+      write: (message) => {
+        const logObject = {
+          method: message.split(" ")[0],
+          url: message.split(" ")[1],
+          status: message.split(" ")[2],
+          responseTime: message.split(" ")[3],
+        };
+        logger.info(JSON.stringify(logObject));
+      },
+    },
+  })
+);
+
 app.listen(PORT, () =>
   console.log("SERVER RUNNING AT " + "http://localhost:" + PORT)
 );

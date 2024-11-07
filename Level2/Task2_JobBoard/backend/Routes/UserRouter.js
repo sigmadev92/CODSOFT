@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import gererator from "generate-password";
 import nodemailer from "nodemailer";
+import { registerUser } from "./contollers/users.js";
 
 dotenv.config();
 const UserRouter = express.Router();
@@ -20,9 +21,6 @@ UserRouter.get("/", (req, res) => {
   res.send("<p>reached Seeker's Route</p>");
 });
 
-const saltRounds = Number(process.env.SALTROUNDS);
-const salt = await bcrypt.genSalt(saltRounds);
-
 //ROUTE-1 REGISTRATION
 UserRouter.post(
   "/register",
@@ -30,95 +28,7 @@ UserRouter.post(
     { name: "ProfilePic", maxCount: 1 },
     { name: "Resume", maxCount: 1 },
   ]),
-  async (req, res) => {
-    console.log("Arrived at POST backend/users/register");
-    if (req.body.Email === process.env.MY_EMAIL) {
-      return res.send({
-        status: false,
-        message: "WARNING_EMAIL_NEVER_USE",
-      });
-    }
-
-    try {
-      const userExists = await Users.findOne({
-        $or: [{ Email: req.body.Email }, { PhoneNumber: req.body.PhoneNumber }],
-      });
-      if (req.body.AUTO_GENERATED && userExists) {
-        console.log("jsdksd");
-        return res.send({
-          status: false,
-          message: "ERR_AUTO_GENE_EMAIL_PASS_SAME_NAME_CONFLICT_CONFUSION",
-        });
-      }
-      if (userExists) {
-        return res.send({
-          status: false,
-          message: "Error: User is already Registered",
-        });
-      }
-
-      //If user is not already registered
-      //step-1 we will add name of profile pic to ProfilePic field.
-      req.body.ProfilePic = req.files.ProfilePic[0].originalname;
-
-      //step-2 If the UserType is seeker then we have to add field for resume.
-      if (req.body.UserType === "seeker") {
-        req.body.Resume = req.files.Resume[0].originalname;
-      }
-      //step-3 Protecting passwords using hashing
-      const enteredPassword = req.body.Password;
-      const hashedPassword = await bcrypt.hash(enteredPassword, salt);
-      if (hashedPassword) {
-        req.body.Password = hashedPassword;
-        req.body.IsMailVerified = false;
-        const newUser = await Users(req.body);
-        await newUser.save();
-        //send a verification mail consisting of verification otp to registered mailId.
-        //setp-1 generate an OTP
-        const OTP = gererator.generate({
-          length: 6,
-          numbers: true,
-          symbols: "#$@_",
-          strict: true,
-        });
-        let message = {
-          from: process.env.MY_EMAIL,
-          to: req.body.Email,
-          subject: "Verify Your Mail Id",
-          html: `<P>Dear ${req.body.FullName} <br/>You have successfully registered with our website JobSoft as a ${req.body.UserType}.As a last step, you are requested to fill this verification code ${OTP} to the verification box provided so that we can verify your mail ID.Your credentials : ${req.body.Email} and password ${enteredPassword} <br/>Team JobSoft</p>`,
-        };
-
-        transporter
-          .sendMail(message)
-          .then(() => {
-            console.log("OTP sent successfully");
-            return res.send({
-              status: true,
-              code: OTP,
-              USER_ID: req.body.USER_ID,
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.send({
-              status: false,
-              message: "ERROR_SERVER_TO_MAIL_ERROR",
-            });
-          });
-      } else {
-        return res.send({
-          status: false,
-          message: "Error : Can't store info now. Try later",
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      res.send({
-        status: false,
-        message: "Error: Connection to the database",
-      });
-    }
-  }
+  registerUser
 );
 
 //The control will come here only if the code entered by user is equal to the
