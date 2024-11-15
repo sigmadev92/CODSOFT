@@ -1,27 +1,18 @@
 import mongoose from "mongoose";
 const UserSchema = mongoose.Schema(
   {
+    isTestData: {
+      type: Boolean,
+      default: false,
+    },
     UserType: {
       type: String,
       required: true,
-    },
-    Gender: {
-      type: String,
-      required: function () {
-        return this.UserType !== "org";
-      },
     },
     FullName: {
       type: String,
       required: true,
     },
-    BirthDate: {
-      type: Date,
-      required: function () {
-        return this.UserType !== "org";
-      },
-    },
-
     Email: {
       type: String,
       required: true,
@@ -29,6 +20,7 @@ const UserSchema = mongoose.Schema(
     IsMailVerified: {
       type: Boolean,
       required: true,
+      default: false,
     },
     PhoneNumber: {
       type: Number,
@@ -47,6 +39,20 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    Gender: {
+      type: String,
+      required: function () {
+        return this.UserType !== "org";
+      },
+    },
+
+    BirthDate: {
+      type: Date,
+      required: function () {
+        return this.UserType !== "org";
+      },
+    },
+
     Posts: {
       type: Array,
     },
@@ -78,9 +84,6 @@ const UserSchema = mongoose.Schema(
     Education: { type: String },
     Experience: {
       type: Number,
-      required: function () {
-        return this.UserType === "recruiter";
-      },
     },
     About: {
       type: String,

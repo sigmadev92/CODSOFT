@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { sectors } from "../../../functionsJs/JobClassification.js";
 import { baseUrl, jobsUrl } from "../../../functionsJs/urls.js";
 export default function JobPost(props) {
   const user = useSelector((state) => state.user);
-  const navigate = useNavigate();
+
   const [details, setDetails] = useState({
     Sector: "Agriculture",
     Industry: "Crop Production",
@@ -76,6 +75,7 @@ export default function JobPost(props) {
           toast.success("Job Added Successfully");
           props.funs.setTab("1");
           props.funs.setJobPost(false);
+          props.funs.setRefresh((prev) => !prev);
         } else {
           toast.error(response.data.message);
         }
@@ -101,6 +101,10 @@ export default function JobPost(props) {
         <h1 className="ml-5 font-semibold text-sm text-center">
           {user.userData.FullName}
         </h1>
+        <h1 className="font-serif font-light text-center">
+          {user.userData.CompanyName}
+        </h1>
+        <hr className="my-3" />
         <div className="flex ml-3 gap-x-2 text-[12px]">
           Select Sector
           <select

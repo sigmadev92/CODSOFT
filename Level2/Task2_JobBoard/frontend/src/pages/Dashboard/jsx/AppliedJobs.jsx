@@ -39,7 +39,7 @@ export default function AppliedJobs(props) {
         .catch((err) => console.log(err));
     };
     function1();
-  }, [jobAction.records, user.userData.USER_ID]);
+  }, []);
 
   return (
     <div

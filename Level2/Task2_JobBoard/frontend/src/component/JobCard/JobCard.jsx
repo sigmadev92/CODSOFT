@@ -24,12 +24,14 @@ export default function JobCard(props) {
     if (!confirm) {
       return;
     }
+
     await axios
       .delete(`${jobsUrl}/delete-job-post/${jobDetail._id}`)
       .then((res) => res.data)
       .then((res) => {
         if (res.status) {
           toast.success("job Deleted Successfully");
+          props.deleteRefresh((prev) => !prev);
         } else {
           toast.error(res.message);
         }
@@ -110,8 +112,12 @@ export default function JobCard(props) {
             />
           </>
         )}
-        <SaveJob job_id={jobDetail._id} />
-        <ApplyToJob job_id={jobDetail._id} />
+        {user.loggedIn && user.userData.USER_ID !== jobDetail.CreatorInfo && (
+          <>
+            <SaveJob job_id={jobDetail._id} />
+            <ApplyToJob job_id={jobDetail._id} />
+          </>
+        )}
       </div>
       <h1 className="text-[10px]">Job Id : {jobDetail._id}</h1>
     </div>

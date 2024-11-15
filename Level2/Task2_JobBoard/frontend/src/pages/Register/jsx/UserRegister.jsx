@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { usersUrl } from "../../../functionsJs/urls";
 import { GoShieldLock } from "react-icons/go";
 import { RiLockUnlockLine } from "react-icons/ri";
+
+import { generateTestData, validBirthDate } from "../functions/register";
 export default function UserRegister(props) {
   const [imageDive, setImageDiv] = useState(false);
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export default function UserRegister(props) {
   const [resUSER_ID, setUSER_ID] = useState("");
   const [enterOtp, setEnterOTP] = useState("");
   const IsMyDevice = navigator.userAgent === process.env.REACT_APP_USER_AGENT;
+  const [testing, setTesting] = useState(false);
   //We have total 13 fileds in database.
   // 8 are common for every type of user
   // UserType, FullName,Email,PhoneNumber,Password,USER_ID,Posts:[],ProfilePic
@@ -31,7 +34,7 @@ export default function UserRegister(props) {
     Email: "",
     PhoneNumber: "",
     Password: "",
-    BirthDate: "",
+    BirthDate: new Date(),
     Experience: "",
   });
   var {
@@ -106,14 +109,30 @@ export default function UserRegister(props) {
         "Please use only First name, middle name(optional) and last name"
       );
     }
-    props.loading(true);
 
+    if (
+      UserType !== "org" &&
+      !validBirthDate(Number(BirthDate.split("-")[0]), new Date().getFullYear())
+    ) {
+      return toast.warn("Please enter a correct birth date");
+    }
+    props.loading(true);
     const USER_ID = UserType + "-" + Date.now();
     const formData = new FormData();
     //first insert common data
     Array.from(Object.keys(details)).forEach((field) => {
       formData.append(field, details[field]);
     });
+    if (testing) {
+      Email = generateTestData(FullName).Email;
+      PhoneNumber = generateTestData(FullName).PhoneNumber;
+      Password = generateTestData(FullName).Password;
+      formData.append("isTestData", true);
+      formData.set("Email", Email);
+      formData.set("PhoneNumber", PhoneNumber);
+      formData.set("Password", Password);
+    }
+
     //Another compulsary data which can't be taken with details
     formData.append("USER_ID", USER_ID);
     formData.append("ProfilePic", profilePic, `images-${USER_ID}.jpg`);
@@ -126,10 +145,19 @@ export default function UserRegister(props) {
       formData.append("Resume", resume, `resumes-${USER_ID}.pdf`);
       formData.append("JobRole", JobRole);
     }
+    console.log(formData);
     try {
-      const response = await axios.post(`${usersUrl}/register`, formData);
+      const response = await axios.post(`${usersUrl}/register`, formData, {
+        headers: {
+          secretkey: process.env.REACT_APP_SECRET_KEY,
+        },
+      });
       if (response.data.status) {
         toast.success("You are Registered Successfully");
+        if (testing) {
+          props.loading(false);
+          return navigate("/login");
+        }
         setMailBox(true);
         setUSER_ID(response.data.USER_ID);
         setOtp(response.data.code);
@@ -184,48 +212,80 @@ export default function UserRegister(props) {
             onChange={HandleChange}
           />
           {UserType !== "org" && (
-            <label>
-              <h1 className="mx-4 font-sans ">Enter your Birth Date : </h1>
+            <>
+              <label>
+                <h1 className="mx-4 font-sans ">Enter your Birth Date : </h1>
+                <input
+                  type="date"
+                  className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
+                  onChange={HandleChange}
+                  name="BirthDate"
+                  value={BirthDate}
+                />
+              </label>
+            </>
+          )}
+
+          {IsMyDevice && (
+            <div>
+              <p className="text-[10px] text-center">This is Official device</p>
+              <label className="ml-4">
+                <input
+                  type="checkbox"
+                  name="testing"
+                  value={testing}
+                  onChange={() => setTesting((prev) => !prev)}
+                />
+                <span className="text-[10px]">For testing ?</span>
+              </label>
+              <p className="text-[10px] pl-5 pr-4">
+                For testing means that your Email, Password and contact will be
+                generated automatically
+              </p>
+            </div>
+          )}
+          {!testing && (
+            <>
               <input
                 className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-                type="date"
-                name="BirthDate"
-                value={BirthDate}
-                placeholder="Birth date"
+                type="email"
+                name="Email"
+                value={Email}
+                placeholder="Email"
                 onChange={HandleChange}
               />
-            </label>
+              <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px] relative">
+                <input
+                  className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
+                  type={passwordHidden ? "password" : "text"}
+                  name="Password"
+                  value={Password}
+                  placeholder="Password"
+                  onChange={HandleChange}
+                />
+                {passwordHidden ? (
+                  <GoShieldLock
+                    className="absolute top-[11px] right-1 text-green-500 text-[25px] hover:bg-black cursor-pointer"
+                    onClick={() => setpaswordHIdden(false)}
+                  />
+                ) : (
+                  <RiLockUnlockLine
+                    className="absolute top-[11px]  right-1 text-red-500 text-[25px] hover:bg-black cursor-pointer"
+                    onClick={() => setpaswordHIdden(true)}
+                  />
+                )}
+              </div>
+              <input
+                className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
+                type="text"
+                maxLength={10}
+                name="PhoneNumber"
+                value={PhoneNumber}
+                placeholder="Contact"
+                onChange={HandleChange}
+              />
+            </>
           )}
-          <h1 className="ml-4">Set Email and Password : </h1>
-          <input
-            className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-            type="email"
-            name="Email"
-            value={Email}
-            placeholder="Email"
-            onChange={HandleChange}
-          />
-          <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px] relative">
-            <input
-              className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
-              type={passwordHidden ? "password" : "text"}
-              name="Password"
-              value={Password}
-              placeholder="Password"
-              onChange={HandleChange}
-            />
-            {passwordHidden ? (
-              <GoShieldLock
-                className="absolute top-[11px] right-1 text-green-500 text-[25px] hover:bg-black cursor-pointer"
-                onClick={() => setpaswordHIdden(false)}
-              />
-            ) : (
-              <RiLockUnlockLine
-                className="absolute top-[11px]  right-1 text-red-500 text-[25px] hover:bg-black cursor-pointer"
-                onClick={() => setpaswordHIdden(true)}
-              />
-            )}
-          </div>
 
           {UserType !== "org" && (
             <>
@@ -279,15 +339,6 @@ export default function UserRegister(props) {
             </>
           )}
 
-          <input
-            className="border-2 border-blue-600 block w-[90%] px-3 mx-auto placeholder:font-mono"
-            type="text"
-            maxLength={10}
-            name="PhoneNumber"
-            value={PhoneNumber}
-            placeholder="Contact"
-            onChange={HandleChange}
-          />
           {UserType === "seeker" && (
             <>
               {" "}
@@ -353,7 +404,7 @@ export default function UserRegister(props) {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="px-2 mb-2 bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-2 border-black font-serif"
+              className="px-2 my-2 rounded-md bg-green-400 font-semibold hover:text-[black] hover:bg-[aqua] border-2 border-black font-serif"
             >
               Register
             </button>

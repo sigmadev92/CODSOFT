@@ -9,7 +9,7 @@ export default function Home() {
   // const [user, setUser] = useState({});
 
   return (
-    <div className="make-blur">
+    <>
       <Main />
       <FeaturedJobs />
 
@@ -26,6 +26,6 @@ export default function Home() {
         Recommended by Experienced Recruiters
       </h1>
       <Recruiter />
-    </div>
+    </>
   );
 }

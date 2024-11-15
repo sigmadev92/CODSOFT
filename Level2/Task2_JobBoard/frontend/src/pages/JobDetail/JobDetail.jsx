@@ -60,7 +60,7 @@ export default function JobDetail() {
               alt="recruiter-logo"
               className="w-[15%] md:w-[60px] rounded-[20px]"
             />
-            <h1>{jobDetail.Title}</h1>
+            <h1>Job Title: {jobDetail.Title}</h1>
             <div className="flex justify-between pr-3 flex-wrap gap-x-5">
               <h1>
                 {jobDetail.CreatorType === "recruiter" ? "Posted By" : ""}{" "}
@@ -88,7 +88,9 @@ export default function JobDetail() {
               </button>
             ) : (
               <>
-                {user.userData.Applies.includes(jobDetail._id) ? "Applied" : ""}
+                {user.userData.Applies?.includes(jobDetail._id)
+                  ? "Applied"
+                  : ""}
               </>
             )}
           </div>

@@ -2,11 +2,11 @@ import React from "react";
 
 export default function About() {
   return (
-    <div>
+    <div className="bg-yellow-100 h-[520px]">
       <h1 className="text-center font-bold text-red-700 text-[25px] underline">
         About Website
       </h1>
-      <div className="w-[90%] md:w-[60%] max-w-[400px] mx-auto mt-3">
+      <div className="w-[90%] md:w-[70%] mx-auto mt-3 bg-blue-200 p-2 shadow-xl shadow-blue-950 rounded-md h-[430px] overflow-y-scroll">
         <p className="font-serif">
           This website is a fiction. No Real Jobs or people. Images are
           generated with the help of META AI. You can register as any one but

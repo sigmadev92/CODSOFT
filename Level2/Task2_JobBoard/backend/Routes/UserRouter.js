@@ -5,7 +5,13 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import gererator from "generate-password";
 import nodemailer from "nodemailer";
-import { registerUser } from "./contollers/users.js";
+import { auth } from "../middlewares.js";
+import {
+  authentication,
+  getUserDetails,
+  registerUser,
+  UserLogin,
+} from "./contollers/users.js";
 
 dotenv.config();
 const UserRouter = express.Router();
@@ -24,12 +30,22 @@ UserRouter.get("/", (req, res) => {
 //ROUTE-1 REGISTRATION
 UserRouter.post(
   "/register",
+  auth,
   upload.fields([
     { name: "ProfilePic", maxCount: 1 },
     { name: "Resume", maxCount: 1 },
   ]),
   registerUser
 );
+
+//ROUTE-2 LOGIN
+UserRouter.post("/login", UserLogin);
+
+//ROUTE-3 AUTHENTICATION
+UserRouter.get("/auth", authentication);
+
+//ROUTE-4 Get Details of specific user(Key=>UserId)
+UserRouter.get("/details/:user_id", getUserDetails);
 
 //The control will come here only if the code entered by user is equal to the
 // verification code.
@@ -41,113 +57,10 @@ UserRouter.put("/verify-mail/:user_id", async (req, res) => {
     { IsMailVerified: true }
   )
     .then(() => res.send({ status: true }))
-    .catch((err) => console.log(err));
-});
-
-UserRouter.post("/login", async (req, res) => {
-  console.log("Arrived at POST backend/users/login");
-
-  Users.findOne({ Email: req.body.Email })
-    .then(async (user) => {
-      if (user) {
-        const result = await bcrypt.compare(req.body.Password, user.Password);
-        if (result) {
-          if (user.IsMailVerified === undefined) {
-            await Users.updateOne(
-              { Email: req.body.Email },
-              { IsMailVerified: false }
-            );
-          }
-          return res.send({
-            status: true,
-            jwt: user._id,
-            userData: user,
-          });
-        } else {
-          return res.send({
-            status: false,
-            message: "Error : The Password doesn't match",
-          });
-        }
-      } else {
-        return res.send({
-          status: false,
-          message: "Error : This email Id doesn't exist.",
-        });
-      }
-    })
     .catch((err) => {
       console.log(err);
-      res.send({
-        status: false,
-        message: "Error : Database error",
-      });
+      res.send({ status: false, message: err.message });
     });
-});
-
-UserRouter.get("/auth", (req, res) => {
-  console.log(req.headers.auth);
-  Users.findOne({ _id: req.headers.auth })
-    .then((response) => {
-      if (response)
-        return res.send({
-          status: true,
-          data: response,
-        });
-
-      res.send({
-        status: false,
-        message: "Authentication denied. ",
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({
-        status: false,
-        message: "Server error",
-      });
-    });
-});
-
-UserRouter.get("/details/:user_id", async (req, res) => {
-  console.log(req.params);
-  try {
-    const user = await Users.findOne({ USER_ID: req.params.user_id });
-    if (user) {
-      return res.send({
-        status: true,
-        data: user,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.send({
-      status: false,
-      message: error.message,
-    });
-  }
-});
-
-UserRouter.get("/data/:user_id", async (req, res) => {
-  try {
-    const user = await Users.findOne({ USER_ID: req.params.user_id });
-    if (user) {
-      return res.send({
-        status: true,
-        data: user,
-      });
-    }
-    res.send({
-      status: false,
-      message: "ERR_INVALID_USER_ID",
-    });
-  } catch (error) {
-    console.log(error);
-    res.send({
-      status: false,
-      message: "ERR_DB_CONN",
-    });
-  }
 });
 
 UserRouter.get("/forget-password/:email", async (req, res) => {
@@ -178,7 +91,7 @@ UserRouter.get("/forget-password/:email", async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
   try {
     await Users.updateOne(
-      { Email: req.headers.email },
+      { Email: req.params.email },
       { $set: { Password: hashedPassword } }
     );
   } catch (err) {
@@ -255,81 +168,6 @@ UserRouter.get("/forget-password/:email", async (req, res) => {
     });
 });
 
-UserRouter.post("/add-job", async (req, res) => {
-  console.log(req.body);
-
-  try {
-    const response = await Users.updateOne(
-      { USER_ID: req.body.userId },
-      { $push: { Applies: req.body.jobId } }
-    );
-    console.log(response);
-    if (response.modifiedCount === 1)
-      res.send({
-        status: true,
-      });
-    else
-      res.send({
-        status: false,
-        message: "Invalid userId or JOb id",
-      });
-  } catch (error) {
-    console.log(error);
-    res.send({
-      status: false,
-      message: "ERR_DB_CONN",
-    });
-  }
-});
-UserRouter.post("/save-job", async (req, res) => {
-  console.log(req.body);
-  try {
-    const response = await Users.updateOne(
-      { USER_ID: req.body.user_id },
-      { $push: { SavedJobs: req.body.job_id } }
-    );
-    if (response.modifiedCount === 1)
-      return res.send({
-        status: true,
-      });
-
-    res.send({
-      status: false,
-      message: "Job Cannot be saved successfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.send({
-      status: false,
-      message: error.message,
-    });
-  }
-});
-UserRouter.post("/unsave-job", async (req, res) => {
-  console.log("Arrived here to unsave the saved job", req.body);
-  try {
-    const response = await Users.updateOne(
-      { USER_ID: req.body.user_id },
-      { $pull: { SavedJobs: req.body.job_id } }
-    );
-    console.log(response);
-    if (response.modifiedCount === 1)
-      return res.send({
-        status: true,
-      });
-
-    res.send({
-      status: false,
-      message: "Job Cannot be unsaved successfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.send({
-      status: false,
-      message: error.message,
-    });
-  }
-});
 UserRouter.get("/usertype/:user_type", async (req, res) => {
   console.log(`${Date()} `);
   try {

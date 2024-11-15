@@ -18,8 +18,11 @@ export default function Login() {
   }
   return (
     <>
-      <div className="w-full h-full" id="main12">
-        <div className=" max-w-[400px] w-[90%] md:w-[50%] border-2 border-black m-auto my-[50px] rounded-t-[10px] bg-white">
+      <div
+        className="w-full h-[530px] flex justify-center bg-slate-500 pt-[50px]"
+        id="main12"
+      >
+        <div className=" max-w-[400px] w-[90%]  h-fit  border-2 border-black rounded-t-[10px] bg-white">
           <h1 className="font-serif text-center bg-black text-[aqua]">
             You want to Login as
           </h1>
@@ -66,7 +69,7 @@ export default function Login() {
           </div>
           <button
             type="button"
-            className="text-gray-900 bg-green-600 px-2 ml-3 my-1"
+            className="text-gray-900 bg-green-600 px-2 ml-3 my-1 rounded-md shadow-lg hover:text-white"
             onClick={() => setHidden(false)}
           >
             {" "}

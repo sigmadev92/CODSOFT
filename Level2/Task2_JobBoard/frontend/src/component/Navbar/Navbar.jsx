@@ -6,15 +6,55 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteAuth } from "../../redux/slice/userSlice";
 import { IoMdMenu } from "react-icons/io";
 import { AiTwotoneCloseCircle } from "react-icons/ai";
+import { BiSolidDashboard } from "react-icons/bi";
+import { FaBriefcase } from "react-icons/fa";
+import { GrLogin, GrLogout } from "react-icons/gr";
+import { RiHome4Fill } from "react-icons/ri";
+import { SiAboutdotme } from "react-icons/si";
+
 export default function Navbar() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const link = window.location.pathname;
   const [hideLinks, setHideLinks] = useState(true);
-  const linksClass =
-    "text-white text-[12px] md:text-[15px] px-2 md:border-none cursor-pointer md:hover:bg-black hover:bg-red-300 rounded-md";
-
   const navigate = useNavigate();
+  const links = [
+    {
+      title: "Home",
+      icon: RiHome4Fill,
+      linkto: "/",
+      visible: true,
+    },
+    { title: "Jobs", icon: FaBriefcase, linkto: "/jobs", visible: true },
+    {
+      title: "Dashboard",
+      icon: BiSolidDashboard,
+      linkto: "/dashboard",
+      visible: user.loggedIn,
+    },
+    {
+      title: "Logout",
+      icon: GrLogout,
+      linkto: "/login",
+      visible: user.loggedIn,
+    },
+    {
+      title: "Login",
+      icon: GrLogin,
+      linkto: "/login",
+      visible: !user.loggedIn,
+    },
+    {
+      title: "About",
+      icon: SiAboutdotme,
+      linkto: "/about",
+      visible: true,
+    },
+  ];
+
+  const linksClass =
+    "text-white text-[12px] md:text-[12px] px-2 md:border-none cursor-pointer md:hover:bg-black hover:bg-red-300 rounded-md";
+
   return (
     <div className="bg-[#257180] w-full flex justify-between p-2 sticky top-0 z-50 ">
       <div id="heading" className="flex ml-[30px] gap-x-2">
@@ -36,71 +76,30 @@ export default function Navbar() {
           }
           gap-x-2  md:flex md:visible md:flex-row md:relative md:bg-transparent md:mt-0`}
         >
-          <li
-            className={`${linksClass} ${link === "/" && "bg-black"}`}
-            onClick={() => {
-              setHideLinks(true);
-              navigate("/");
-            }}
-          >
-            Home
-          </li>
-          <li
-            className={`${linksClass} ${link === "/jobs" && "bg-black"}`}
-            onClick={() => {
-              setHideLinks(true);
-              navigate("/jobs");
-            }}
-          >
-            {" "}
-            Jobs
-          </li>
-          {user.loggedIn ? (
-            <>
-              <li
-                className={`${linksClass} ${
-                  link.includes("dashboard") && "bg-black"
-                }`}
-                onClick={() => {
-                  setHideLinks(true);
-                  navigate("/dashboard/");
-                }}
-              >
-                Dashboard
-              </li>
-              <li
-                className={linksClass}
-                onClick={() => {
-                  setHideLinks(true);
-                  localStorage.removeItem("jwt");
-                  dispatch(deleteAuth());
-                  navigate("/login");
-                }}
-              >
-                Logout
-              </li>
-            </>
-          ) : (
-            <li
-              className={`${linksClass} ${link === "/login" && "bg-black"}`}
-              onClick={() => {
-                setHideLinks(true);
-                navigate("/login");
-              }}
-            >
-              Login
-            </li>
-          )}
-
-          <li
-            className={`${linksClass} ${link === "/about" && "bg-black"}`}
-            onClick={() => {
-              setHideLinks(true);
-              navigate("/about");
-            }}
-          >
-            About
-          </li>
+          {links
+            .filter((navlink) => navlink.visible)
+            .map((navLink, index) => {
+              return (
+                <li key={index}>
+                  <div
+                    className={`${linksClass} ${
+                      link === navLink.linkto && "bg-black"
+                    }`}
+                    onClick={() => {
+                      setHideLinks(true);
+                      if (navLink.title === "Logout") {
+                        dispatch(deleteAuth());
+                        localStorage.removeItem("jwt");
+                      }
+                      navigate(navLink.linkto);
+                    }}
+                  >
+                    <navLink.icon className="mx-auto" />
+                    {navLink.title}
+                  </div>
+                </li>
+              );
+            })}
         </ul>
 
         <button

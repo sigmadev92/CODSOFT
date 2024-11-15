@@ -16,7 +16,7 @@ export default function Profile() {
   useEffect(() => {
     async function fetch() {
       await axios
-        .get(`${usersUrl}/data/${user_ID}`)
+        .get(`${usersUrl}/details/${user_ID}`)
         .then((response) => {
           if (response.data.status) setUserDetails(response.data.data);
           else console.log(response.data);

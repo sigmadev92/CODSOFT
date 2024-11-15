@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { setAuth } from "../../../redux/slice/userSlice";
 import { toast } from "react-toastify";
 import { usersUrl } from "../../../functionsJs/urls";
+import { FaLock } from "react-icons/fa";
+import { FaLockOpen } from "react-icons/fa";
 export default function UserLogin(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ export default function UserLogin(props) {
 
   function HandleSubmit(event) {
     event.preventDefault();
-
+    console.log(details);
     axios
       .post(`${usersUrl}/login`, details)
       .then((response) => {
@@ -50,10 +52,8 @@ export default function UserLogin(props) {
           dispatch(setAuth(response.data.userData));
           toast.success("Logged In successfully");
           navigate("/");
-          // window.location.reload();
         } else {
-          alert("Wrong credentials. Try again");
-          window.location.reload();
+          toast.error(response.data.message);
         }
       })
       .catch((err) => {
@@ -78,7 +78,7 @@ export default function UserLogin(props) {
         placeholder="Email"
         onChange={HandleChange}
       />
-      <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px]">
+      <div className="flex  w-[90%] mx-auto justify-center mt-[-10px] mb-[-10px] relative">
         <input
           className="border-2 border-blue-600 placeholder:font-mono ml-[-0.5px] w-full px-3 mr-[-3px]"
           type={passwordHidden ? "password" : "text"}
@@ -87,13 +87,17 @@ export default function UserLogin(props) {
           placeholder="Password"
           onChange={HandleChange}
         />
-        <button
-          type="button"
-          className=" border-2 bg-red-400 border-black h-fit mt-[10px] px-2 hover:bg-[aqua]"
-          onClick={() => setpaswordHIdden((prev) => !prev)}
-        >
-          TE
-        </button>
+        {passwordHidden ? (
+          <FaLock
+            className="absolute top-4 right-[2px] cursor-pointer hover:text-red-500"
+            onClick={() => setpaswordHIdden((prev) => !prev)}
+          />
+        ) : (
+          <FaLockOpen
+            onClick={() => setpaswordHIdden((prev) => !prev)}
+            className="cursor-pointer hover:text-green-300 absolute top-4 right-[2px]"
+          />
+        )}
       </div>
 
       <button

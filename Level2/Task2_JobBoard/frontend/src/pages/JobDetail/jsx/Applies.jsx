@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 export default function TotalApplies(props) {
   const jobAction = useSelector((state) => state.jobAction);
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   return (
     <>
       {

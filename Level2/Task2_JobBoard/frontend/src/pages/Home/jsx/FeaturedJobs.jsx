@@ -32,7 +32,7 @@ export default function FeaturedJobs() {
         });
     };
 
-    if (user.loggedIn) {
+    if (user.loggedIn && user.userData) {
       featuredJobs();
     } else {
       setIsError(
@@ -40,9 +40,9 @@ export default function FeaturedJobs() {
       );
     }
     setLoading(false);
-  }, [refresh, user.loggedIn, user.userData.JobRole]);
+  }, [refresh, user.loggedIn, user.userData?.JobRole]);
 
-  if (!user.loggedIn || user.userData.UserType !== "seeker") {
+  if (!user.loggedIn || user.userData?.UserType !== "seeker") {
     return;
   }
   return (

@@ -11,11 +11,11 @@ export default function PostedJobs(props) {
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsloading] = useState(true);
   const [isError, setIsError] = useState(false);
-
+  const [deleteRefresh, setDeleteRefresh] = useState(false);
   useEffect(() => {
     const function1 = async () => {
       await axios
-        .get(`${jobsUrl}/get-posted-jobs/${user.userData.USER_ID}`)
+        .get(`${jobsUrl}/get-posted-jobs/${user.userData?.USER_ID}`)
         .then((res) => res.data)
         .then((res) => {
           if (res.status) {
@@ -26,12 +26,13 @@ export default function PostedJobs(props) {
           }
         })
         .catch((error) => {
+          console.log(error);
           setIsloading(false);
           setIsError(true);
         });
     };
     function1();
-  }, []);
+  }, [deleteRefresh]);
   return (
     <div
       id="saved-jobs"
@@ -48,11 +49,21 @@ export default function PostedJobs(props) {
       </div>
       {isLoading && <Loading />}
       {isError && <Error />}
-      {jobs.length > 0 && (
+      {jobs.length > 0 ? (
         <div className="flex flex-wrap">
           {jobs.map((job, index) => {
-            return <JobCard data={job} key={index} />;
+            return (
+              <JobCard
+                data={job}
+                key={index}
+                deleteRefresh={setDeleteRefresh}
+              />
+            );
           })}
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center h-full">
+          <h1 className="text-center">No jobs posted Yet</h1>
         </div>
       )}
     </div>

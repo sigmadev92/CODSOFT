@@ -10,21 +10,20 @@ import AppliedJobs from "./jsx/AppliedJobs";
 import MyPosts from "./jsx/MyPosts";
 import SavedJobs from "./jsx/SavedJobs";
 import PostedJobs from "./jsx/PostedJobs";
-import Loading from "../../component/Loading";
-
+import { ImStatsDots } from "react-icons/im";
+import Analytics from "./jsx/Analytics/Main";
 export default function Dashboard() {
   const user = useSelector((state) => state.user);
   const [openProfile, setopenProfile] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [close, setClose] = useState(true);
   const [openAppliedJobs, setAppliedJObs] = useState(true);
   const [openMyPosts, setMyPosts] = useState(true);
   const [openSavedJobs, setSavedJobs] = useState(true);
   const [openPostedJobs, setPostedJobs] = useState(true);
-  // const [appliedJobsData, setAppliedJobsData] = useState([]);
   const navigate = useNavigate();
-  if (!user.loggedIn && isLoading) {
-    return <Loading />;
-  } else setIsLoading(false);
+  // if (!user.loggedIn && isLoading) {
+  //   return <Loading />;
+  // } else setIsLoading(false);
 
   return (
     <div>
@@ -44,6 +43,17 @@ export default function Dashboard() {
         >
           Write a Post <TfiWrite className="inline text-[15px] text-black" />
         </button>
+        {user.userData?.UserType !== "seeker" && (
+          <button
+            type="button"
+            className="bg-blue-600 font-serif  hover:bg-green-600 p-1 shadow-lg m-2 rounded-md border-black border-2 text-[10px]"
+            onClick={() => setClose(false)}
+          >
+            Analytics <ImStatsDots className="inline text-[15px] text-white" />
+          </button>
+        )}
+
+        {!close && <Analytics fn={{ setClose }} userDetails={user.userData} />}
       </div>
 
       <div className="h-[30px] bg-red-300 flex gap-x-3 ">
@@ -54,14 +64,14 @@ export default function Dashboard() {
             </button>
           </h1>
         )}
-        {user.userData.UserType === "seeker" && !openAppliedJobs && (
+        {user.userData?.UserType === "seeker" && !openAppliedJobs && (
           <h1 onClick={() => setAppliedJObs(true)}>
             <button className="text-[aqua] text-[12px] bg-black px-2 rounded-r-lg py-1">
               Applied Jobs <LuPanelRightClose className="inline" />
             </button>
           </h1>
         )}
-        {user.userData.UserType !== "seeker" && !openPostedJobs && (
+        {user.userData?.UserType !== "seeker" && !openPostedJobs && (
           <h1 onClick={() => setPostedJobs(true)}>
             <button className="text-[aqua] text-[12px] bg-black px-2 rounded-r-lg py-1">
               Posted Jobs <LuPanelRightClose className="inline" />
@@ -84,18 +94,19 @@ export default function Dashboard() {
           </h1>
         )}
       </div>
-
-      <div className="flex gap-x-2 flex-wrap justify-center md:flex-nowrap p-1  ">
-        {openProfile && <Details fn={setopenProfile} />}
-        {user.userData.UserType === "seeker" && openAppliedJobs && (
-          <AppliedJobs fn={setAppliedJObs} />
-        )}
-        {user.userData.UserType !== "seeker" && openPostedJobs && (
-          <PostedJobs fn={setPostedJobs} />
-        )}
-        {openMyPosts && <MyPosts fn={setMyPosts} />}
-        {openSavedJobs && <SavedJobs fn={setSavedJobs} />}
-      </div>
+      {close && (
+        <div className="flex gap-x-2 flex-wrap justify-center md:flex-nowrap p-1  ">
+          {openProfile && <Details fn={setopenProfile} />}
+          {user.userData?.UserType === "seeker" && openAppliedJobs && (
+            <AppliedJobs fn={setAppliedJObs} />
+          )}
+          {user.userData?.UserType !== "seeker" && openPostedJobs && (
+            <PostedJobs fn={setPostedJobs} />
+          )}
+          {openMyPosts && <MyPosts fn={setMyPosts} />}
+          {openSavedJobs && <SavedJobs fn={setSavedJobs} />}
+        </div>
+      )}
     </div>
   );
 }

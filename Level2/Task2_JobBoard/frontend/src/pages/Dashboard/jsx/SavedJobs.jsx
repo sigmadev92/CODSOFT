@@ -40,7 +40,7 @@ export default function SavedJobs(props) {
         .catch((err) => console.log(err));
     };
     function1();
-  }, [refresh]);
+  }, []);
 
   return (
     <div
@@ -64,11 +64,15 @@ export default function SavedJobs(props) {
       </div>
       {isLoading && <Loading />}
       {error && <Error />}
-      {jobs.length > 0 && (
+      {jobs.length > 0 ? (
         <div className="flex flex-wrap">
           {jobs.map((job, index) => {
             return <JobCard data={job} key={index} />;
           })}
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center h-full bg-orange-300">
+          <h1 className="text-center text-black">No Saved Jobs</h1>
         </div>
       )}
     </div>

@@ -1,13 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { MdScreenSearchDesktop } from "react-icons/md";
 import { jobsUrl } from "../../../functionsJs/urls";
 import { toast } from "react-toastify";
+import { BsSearch } from "react-icons/bs";
 export default function JobSearch(props) {
   const [Title, setTitle] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (Title === "") return;
     props.fn.setClickedSearch(true);
     await axios
       .get(`${jobsUrl}/search-jobs/${Title}`)
@@ -27,9 +28,9 @@ export default function JobSearch(props) {
   return (
     <div
       id="job-search"
-      className="w-[400px] mx-auto border-2 border-black mt-3 rounded-lg px-2"
+      className="w-[400px] mx-auto border-2 border-black mt-3 rounded-lg pl-2"
     >
-      <form className="flex p-2">
+      <form className="flex ">
         <input
           type="search"
           name="Title"
@@ -40,12 +41,12 @@ export default function JobSearch(props) {
           placeholder:text-[12px]"
           onChange={(e) => setTitle(e.target.value)}
         />
-
-        <MdScreenSearchDesktop
-          type="button"
-          className="text-[50px] cursor-pointer hover:text-green-500"
-          onClick={handleSubmit}
-        />
+        <div className="flex flex-col justify-center bg-black px-3">
+          <BsSearch
+            className="text-white cursor-pointer hover:text-[aqua]"
+            onClick={handleSubmit}
+          />
+        </div>
       </form>
     </div>
   );
