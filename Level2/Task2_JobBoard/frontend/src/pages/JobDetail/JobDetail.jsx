@@ -49,7 +49,7 @@ export default function JobDetail() {
   }, []);
 
   return (
-    <div>
+    <div className="min-h-screen">
       {error && <Error />}
       {loading && <Loading />}
       {jobDetail && (

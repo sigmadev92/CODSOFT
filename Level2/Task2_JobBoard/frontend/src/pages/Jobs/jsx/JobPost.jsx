@@ -95,7 +95,7 @@ export default function JobPost(props) {
           <img
             src={`${baseUrl}/${user.userData.ProfilePic}`}
             alt="The org or Recruiter"
-            className="w-[50px] h-[50px] rounded-full"
+            className="w-[50px] h-[50px] rounded-full border-2 border-[green]"
           />
         </div>
         <h1 className="ml-5 font-semibold text-sm text-center">

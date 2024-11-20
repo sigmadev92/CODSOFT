@@ -17,7 +17,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import JobDetail from "./pages/JobDetail/JobDetail";
 import { fetchJobActionRecords } from "./redux/slice/jobActionSlice";
-import ChangePic from "./pages/Dashboard/jsx/ChangePic";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,7 +50,6 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile/:user_id" element={<Profile />} />
           <Route path="/jobs/:jobid" element={<JobDetail />} />
-          <Route path="/change-profile-pic" element={<ChangePic />} />
         </Routes>
         <Footer />
       </BrowserRouter>

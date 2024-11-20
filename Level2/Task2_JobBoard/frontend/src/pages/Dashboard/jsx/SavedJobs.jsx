@@ -40,7 +40,7 @@ export default function SavedJobs(props) {
         .catch((err) => console.log(err));
     };
     function1();
-  }, []);
+  }, [refresh]);
 
   return (
     <div

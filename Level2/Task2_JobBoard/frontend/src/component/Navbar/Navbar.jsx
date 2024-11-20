@@ -95,7 +95,7 @@ export default function Navbar() {
                     }}
                   >
                     <navLink.icon className="mx-auto" />
-                    {navLink.title}
+                    <h1 className="text-center">{navLink.title}</h1>
                   </div>
                 </li>
               );

@@ -141,11 +141,12 @@ const UserLogin = async (req, res) => {
   console.log("Arrived at POST backend/users/login");
   try {
     const user = await Users.findOne({ Email: req.body.Email });
-    console.log(user.Password, req.body.Password);
+
     if (!user) {
       console.log("Invalid Email");
       return res.send({ status: false, message: "Invalid Email" });
     }
+    console.log(user.Password, req.body.Password);
     if (user.isTestData) {
       console.log("LOGIN=>Test Data");
       const isPasswordMatches = req.body.Password === user.Password;

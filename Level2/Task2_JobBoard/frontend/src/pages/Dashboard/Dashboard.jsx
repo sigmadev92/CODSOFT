@@ -12,6 +12,8 @@ import SavedJobs from "./jsx/SavedJobs";
 import PostedJobs from "./jsx/PostedJobs";
 import { ImStatsDots } from "react-icons/im";
 import Analytics from "./jsx/Analytics/Main";
+import ChangeImage from "../../component/ChangeImage/Main";
+import { baseUrl } from "../../functionsJs/urls";
 export default function Dashboard() {
   const user = useSelector((state) => state.user);
   const [openProfile, setopenProfile] = useState(false);
@@ -20,13 +22,11 @@ export default function Dashboard() {
   const [openMyPosts, setMyPosts] = useState(true);
   const [openSavedJobs, setSavedJobs] = useState(true);
   const [openPostedJobs, setPostedJobs] = useState(true);
+  const [editImageBox, setEditImageBox] = useState(false);
   const navigate = useNavigate();
-  // if (!user.loggedIn && isLoading) {
-  //   return <Loading />;
-  // } else setIsLoading(false);
 
   return (
-    <div>
+    <div className=" min-h-screen mb-4">
       <h1 className="text-center bg-black text-white font-bold">Dashboard</h1>
       <div id="operations" className="flex gap-x-3">
         <button
@@ -52,6 +52,13 @@ export default function Dashboard() {
             Analytics <ImStatsDots className="inline text-[15px] text-white" />
           </button>
         )}
+        <button
+          type="button"
+          className="bg-black text-white font-serif  hover:bg-green-600 p-1 shadow-lg m-2 rounded-md border-black border-2 text-[10px]"
+          onClick={() => setEditImageBox(true)}
+        >
+          Change Profile Pic
+        </button>
 
         {!close && <Analytics fn={{ setClose }} userDetails={user.userData} />}
       </div>
@@ -94,8 +101,15 @@ export default function Dashboard() {
           </h1>
         )}
       </div>
+      {editImageBox && (
+        <ChangeImage
+          img={`${baseUrl}/${user.userData?.ProfilePic}`}
+          functions={{ setEditImageBox }}
+          user_id={user.userData?.USER_ID}
+        />
+      )}
       {close && (
-        <div className="flex gap-x-2 flex-wrap justify-center md:flex-nowrap p-1  ">
+        <div className="flex gap-x-2 flex-wrap justify-center md:flex-nowrap p-1">
           {openProfile && <Details fn={setopenProfile} />}
           {user.userData?.UserType === "seeker" && openAppliedJobs && (
             <AppliedJobs fn={setAppliedJObs} />

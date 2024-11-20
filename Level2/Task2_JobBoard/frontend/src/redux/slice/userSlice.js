@@ -32,6 +32,10 @@ const userSlice = createSlice({
       state.loggedIn = false;
       state.userData = null;
     },
+    setProfilePic: (state, action) => {
+      console.log("hello");
+      state.userData.ProfilePic = action.payload;
+    },
   },
   extraReducers: (builders) => {
     builders.addCase(fetchUser.fulfilled, (state, action) => {
@@ -47,6 +51,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setAuth, deleteAuth } = userSlice.actions;
+export const { setAuth, deleteAuth, setProfilePic } = userSlice.actions;
 
 export default userSlice.reducer;

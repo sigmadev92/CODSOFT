@@ -203,4 +203,23 @@ UserRouter.put("/edit-user/:user_id", async (req, res) => {
     });
   }
 });
+
+UserRouter.put(
+  "/edit-profile-pic",
+  upload.single("ProfilePic"),
+  async (req, res) => {
+    console.log("Arrived on PUT backend/users/edit-profile-pic");
+    try {
+      return res.send({
+        status: true,
+      });
+    } catch (error) {
+      console.log(error);
+      res.send({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
+);
 export default UserRouter;

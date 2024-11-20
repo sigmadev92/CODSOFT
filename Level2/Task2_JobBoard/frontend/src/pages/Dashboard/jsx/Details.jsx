@@ -10,7 +10,9 @@ import { useNavigate } from "react-router-dom";
 export default function Details(props) {
   const user = useSelector((state) => state.user);
   const [editProfileBox, setEditProfileBox] = useState(false);
+
   const navigate = useNavigate();
+
   return (
     <div
       id="details"
@@ -28,10 +30,6 @@ export default function Details(props) {
           src={`${baseUrl}/${user.userData.ProfilePic}`}
           alt="profile"
           className="w-[150px] h-[150px] rounded-full "
-        />
-        <FaPencilAlt
-          className="absolute top-[180px] right-[50px] hover:text-green-300 cursor-pointer text-[12px] text-black "
-          onClick={() => navigate("/change-profile-pic")}
         />
       </div>
       <h1 className="font-semibold">{user.userData.FullName}</h1>

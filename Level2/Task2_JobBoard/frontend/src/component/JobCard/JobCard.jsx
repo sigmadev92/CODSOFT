@@ -59,7 +59,9 @@ export default function JobCard(props) {
           alt="Org or recruiter portrait"
           className="w-[40px] h-[40px] my-1 rounded-full"
         />
-        <h1 className="hover:text-blue-400 cursor-pointer">View Job</h1>
+        <h1 className="hover:text-blue-400 cursor-pointer font-bold my-3 text-[12px]">
+          View Details
+        </h1>
       </div>
       <h1 className="text-white font-mono text-[12px] truncate">
         {jobDetail.Title}
@@ -123,16 +125,3 @@ export default function JobCard(props) {
     </div>
   );
 }
-
-//Scenerios when there will be apply button
-// NO user is loggedIn
-// A seeker is loogedIn
-
-//When a person who created this job -> Edit button.
-
-/*
-Helpers
-  <button onClick={() => console.log(user.userData.USER_ID)}>
-          check
-        </button>
-*/
